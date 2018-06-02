@@ -1,0 +1,39 @@
+.gallery_diplom h1
+{
+ color: #000000;
+    font-size: 24px;
+    line-height: 24px;
+    text-transform: uppercase;
+    padding: 9px 0;
+    margin: 0 0 10px 0;
+    font-weight: normal;
+    font-family: 'MuseoSansLight', sans-serif;
+    text-align: center;
+    border-top: 1px solid #DADADA;
+    border-bottom: 1px solid #DADADA;
+    cursor: default;   
+}
+.gallery_diplom
+{
+  display:block;
+ position: relative;
+    clear: both;  
+}
+.gallery_diplom ul
+{
+  display:flex;
+ position: relative;
+   list-style-type:none;
+   flex-direction:row;
+   justify-content:space-around;
+   align-items:stretch;
+   flex-wrap:wrap;
+}
+
+.gallery_diplom li
+{
+   list-style-type:none;
+  margin: 15px;
+}
+
+

@@ -1,0 +1,19 @@
+<?php
+$_['heading_title'] 		= 'Фильтр товаров';
+$_['button_clear']			= 'Очистить';
+$_['default_value_select'] 	= '- Выбрать -';
+$_['price_header']			= 'Цена';
+$_['categories_header']	    = 'Категории';
+$_['min_max']				= 'Мин - Макс:';
+$_['reset']					= 'Очистить';
+$_['submit']				= 'Применить';
+$_['stock_status']          = 'Наличие';
+$_['manufacturers']         = 'Производители';
+$_['entry_show_more']       = 'Показать ещё...';
+$_['entry_show_less']       = 'Свернуть';
+$_['rating']       			= 'Рейтинг';
+$_['option']       			= 'Опции';
+$_['entry_block_title']	    = 'Уточнить поиск';
+$_['entry_search']	        = 'Ключевые слова';
+$_['text_bf_page_title']	= 'Фильтр товаров';
+$_['empty_slider_value']	= 'Не задано';

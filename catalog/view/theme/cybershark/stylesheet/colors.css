@@ -1,0 +1,238 @@
+.product-colors-list {
+    padding-bottom: 33px;
+}
+.product-colors-list-title {
+    color: #3E3E3E;
+/*    font-size: 14px;
+    line-height: 16px;*/
+    
+        font-size: 20px;
+    line-height: 21px;
+    margin: 0 0 10px 0;
+    font-weight: normal;
+    font-family: 'MuseoSansLight', sans-serif;
+}
+.product-colors-list .product_colors {
+    list-style: outside none none;
+    margin: 0;
+    padding: 0;
+}
+.product-colors-list .product_colors li {
+    display: block;
+    float: left;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.product-colors-list .product_colors li.product_color_selected {
+    
+}
+.product-colors-list .product_colors li.product_color_selected .product_color_selected_container {
+    border: 1px solid #D6473E;
+    border-radius: 50%;
+}
+.product-colors-list .product_colors li.product_color_selected .product_color_selected_container img {
+    border: 1px solid transparent;
+    display: block;
+    height: 34px;
+    width: 34px;
+}
+
+.product-colors-list .product_colors li.product_color_not_selected {
+    
+}
+.product-colors-list .product_colors li.product_color_not_selected .product_color_not_selected_container {
+    display: block;
+}
+.product-colors-list .product_colors li.product_color_not_selected .product_color_not_selected_container img {
+    display: block;
+    border: 0px solid transparent;
+    height: 34px;
+    width: 34px;
+    margin: 1px 1px 0 0;
+}
+
+
+
+
+
+.category_product_colors {
+    height: 170px;
+    list-style: outside none none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+}
+.product-list .category_product_colors {
+    top: 5px;
+}
+.category_product_colors > li {
+    border: 1px solid transparent;
+    border-radius: 50%;
+    box-sizing: border-box;
+    display: block;
+    font-size: 0;
+    height: 34px;
+    line-height: 34px;
+    overflow: hidden;
+    text-align: center;
+    width: 34px;
+}
+.category_product_colors > li > a {
+    border: 4px solid transparent;
+    display: block;
+    height: 28px;
+    width: 28px;
+}
+.category_product_colors > li > a > span {
+    border-radius: 50%;
+    display: block;
+    height: 24px;
+    width: 24px;
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%) repeat scroll 0 0;
+}
+.category_product_colors > li.category_product_color_selected {
+    border: 1px solid #cdcdcd;
+}
+
+.also-product-colors-list {
+    border: 1px solid #009933;
+    border-left: 3px solid #009933;
+    display: block;
+    margin: 25px 0;
+    padding: 15px 30px 0 30px;
+    position: relative;
+}
+.also-product-colors-list::after {
+    background-color: #ffffff;
+    border-bottom: 3px solid #009933;
+    border-right: 3px solid #009933;
+    content: "";
+    display: block;
+    height: 15px;
+    left: -8px;
+    position: absolute;
+    top: 100px;
+    transform: rotate(-45deg);
+    width: 15px;
+}
+.also-product-colors-list .also-product-colors-list-header {
+    color: #009933;
+    cursor: default;
+    font-size: 16px;
+    line-height: 18px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    position: relative;
+}
+.also-product-colors-list .also-product-colors-list-body {
+    
+    position: relative;
+}
+.also-product_colors {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+.also-product_colors li {
+    display: block;
+    float: left;
+    position: relative;
+}
+.also-product_colors_container {
+    height: 160px;
+    margin: 0 10px 10px 0;
+    overflow: hidden;
+    position: relative;
+    width: 120px;
+}
+.also-product_colors_image {
+    
+}
+.also-product_colors_image a {
+    display: block;
+    position: relative;
+}
+.also-product_colors_image a img {
+    margin: 5px 30px 0 0;
+}
+.also-product_colors_image a span {
+    border-radius: 50%;
+    display: block;
+    height: 24px;
+    position: absolute;
+    right: 10px;
+    top: 0;
+    width: 24px;
+    border: 1px solid #303030;
+}
+.also-product_colors_name {
+    padding: 5px 0 0 0;
+    position: relative;
+}
+.also-product_colors_name a::before {
+    /*background: rgba(0, 0, 0, 0) linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 1) 100%) repeat scroll 0 0;*/
+    
+    background: -webkit-linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 1));
+    background: -ms-linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 1));
+    background: -moz-linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 1));
+    background: linear-gradient('to bottom', rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 1));
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 10px;
+    position: absolute;
+    width: 100%;
+}
+.also-product_colors_name a,
+.also-product_colors_name a:focus {
+    color: #0e99a0;
+    display: block;
+    font-size: 13px;
+    line-height: 15px;
+    margin-bottom: 5px;
+    max-height: 50px;
+    overflow: hidden;
+    padding-bottom: 2px;
+    position: relative;
+    text-decoration: none;
+    min-height: 20px;
+}
+.also-product_colors_name a:hover,
+.also-product_colors_name a:active {
+    color: #8c6635;
+    text-decoration: underline;
+}
+.also-product_colors_price {
+    
+}
+.also-product_colors_price .price-current {
+    font-size: 18px;
+    line-height: 20px;
+    color: #724b20;
+}
+
+@media (max-width: 767px) {
+    .also-product-colors-list {
+        margin: 5px 0 15px;
+        padding: 15px 5px 0 30px;
+    }
+    .also-product_colors_image a img {
+        margin: 5px 30px 0 0;
+    }
+    .also-product_colors_container {
+        border-bottom: 1px solid #eaeaea;
+        border-right: 1px solid #eaeaea;
+        height: 160px;
+        margin: 0 5px 5px 0;
+        overflow: hidden;
+        padding-bottom: 10px;
+        position: relative;
+        width: 120px;
+    }
+}

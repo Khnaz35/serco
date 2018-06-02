@@ -1,0 +1,78 @@
+.box-newsletter-title {
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 18px;
+    text-decoration: none;
+    display: block;
+    font-family: 'MuseoSansLight', sans-serif;
+    cursor: default;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+.box-newsletter form {
+    width: 100%;
+}
+.box-newsletter .form-control {
+    width: 87% !important;
+    float: left;
+    display: block !important;
+    font-size: 12px !important;
+    line-height: 14px !important;
+    color: #B4B4B4 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0px 10px !important;
+    box-shadow: none !important;
+    height: 24px !important;
+    font-family: 'MuseoSansLight', sans-serif;
+    background-color: #303030 !important;
+}
+.box-newsletter .newsletter,
+.box-newsletter .newsletter:focus {
+    width: 12% !important;
+    float: right;
+    display: block !important;
+    height: 24px !important;
+    color: #131313;
+    background-color: #fff;
+    font-size: 12px !important;
+    line-height: 14px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    font-family: 'MuseoSansLight', sans-serif;
+    padding: 0 !important;
+    text-align: center !important;
+}
+.box-newsletter .newsletter:hover,
+.box-newsletter .newsletter:active {
+    width: 12% !important;
+    float: right;
+    display: block !important;
+    height: 24px !important;
+    color: #ffffff;
+    background-color: #797C81;
+    font-size: 12px !important;
+    line-height: 14px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    font-family: 'MuseoSansLight', sans-serif;
+    padding: 0 !important;
+    text-align: center !important;
+}
+.box-newsletter-error {
+    color: #D6473E;
+    background-color: #fff;
+    border: 1px solid #D6473E;
+    text-align: center;
+    padding: 5px 10px;
+    font-size: 14px;
+    line-height: 16px;
+    margin-top: 5px;
+    font-family: 'MuseoSansLight', sans-serif;
+    cursor: default;
+}
+@media (max-width: 768px) {
+    .box-newsletter-title {
+        text-align: center;
+    }
+}

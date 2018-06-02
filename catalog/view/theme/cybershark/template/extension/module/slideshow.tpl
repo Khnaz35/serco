@@ -1,0 +1,24 @@
+<?php if ($banners) { ?>
+    <div id="slideshow<?php echo $module; ?>" class="owl-carousel slideshow" style="opacity: 1;">
+        <?php foreach ($banners as $banner) { ?>
+            <div class="item">
+                <?php if ($banner['link']) { ?>
+                    <a href="<?php echo $banner['link']; ?>"><img src="<?php echo $banner['image']; ?>" alt="<?php echo $banner['title']; ?>" class="img-responsive" /></a>
+                <?php } else { ?>
+                    <img src="<?php echo $banner['image']; ?>" alt="<?php echo $banner['title']; ?>" class="img-responsive" />
+                <?php } ?>
+            </div>
+        <?php } ?>
+    </div>
+    <script type="text/javascript"><!--
+    $('#slideshow<?php echo $module; ?>').owlCarousel({
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 9000,
+        items: 1,
+        dots: true,
+        nav: true,
+        navText: ['<i class="fa fa-angle-left fa-5x"></i>', '<i class="fa fa-angle-right fa-5x"></i>'],
+    });
+    --></script>
+<?php } ?>

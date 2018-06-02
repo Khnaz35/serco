@@ -1,0 +1,146 @@
+#live-search,
+#live-search_fixed {
+	width:94%;
+	position:absolute;
+	z-index:1000;
+	padding:5px 0px;
+	margin-top: -1px;
+	background-color:#FFF;
+    box-shadow: 1px 2px 1px rgba(0,0,0,0.4);
+    border: 1px solid #CDCDCD;
+	display:none;
+}
+#live-search{
+	right: 0;
+	width: 1120px;
+}
+@media screen and (max-width: 1199px){
+	#live-search{
+	width: 920px;
+}
+}
+@media screen and (max-width: 991px){
+	#live-search{
+	width: 715px;
+}
+}
+@media screen and (max-width: 767px){
+	#live-search{
+	width: calc(100vw - 30px - 5px);
+}
+}
+#live-search .loading,
+#live-search_fixed .loading {
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+	width: 20px;
+}
+#live-search ul,
+#live-search_fixed ul {
+	list-style-type: none;
+	margin:0px;
+	padding:0px;
+}
+#live-search ul li,
+#live-search_fixed ul li {
+	cursor:pointer;
+	padding:5px;
+	margin:0px 5px;
+	background-color:#FFF;
+	min-height:40px;
+	clear:both;
+    border-bottom: 1px solid #E6E6E6;
+}
+/*#live-search ul li:nth-child(even),
+#live-search_fixed ul li:nth-child(even) {
+	background-color: #FAFAFA;
+}*/
+#live-search ul li:hover,
+#live-search_fixed ul li:hover {
+	background-color:#FAFAFA;
+}
+#live-search ul li a, 
+#live-search_fixed ul li a {
+	text-decoration: none;
+	display:block;
+}
+#live-search ul li .product-image,
+#live-search_fixed ul li .product-image {
+	float:left;
+    width: 40px;
+	margin-right: 5px;
+}
+#live-search ul li .product-image,
+#live-search_fixed ul li .product-image {
+    width: 100%;
+    height: auto;
+    max-width: 40px;
+}
+#live-search ul li .product-name p,
+#live-search_fixed ul li .product-name p {
+	font-weight: normal;
+	font-style: italic;
+	font-size: 10px;
+	color:#3E3E3E;
+	margin:0px;
+	padding:0px;
+    font-family: 'MuseoSansLight', sans-serif;
+}
+#live-search ul li .product-name,
+#live-search_fixed ul li .product-name {
+    font-weight: normal;
+    float: left;
+    width: calc(100% - 180px - 45px);
+    height: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    font-family: 'MuseoSansLight', sans-serif;
+}
+#live-search ul li .product-price,
+#live-search_fixed ul li .product-price {
+	text-align: right;
+	font-size: 12px;
+	font-weight: normal;
+	float:right;
+	/*margin-top:10px;*/
+	width: 180px;
+    font-family: 'MuseoSansLight', sans-serif;
+}
+#live-search ul li .product-price .price,
+#live-search_fixed ul li .product-price .price {
+	color: #3E3E3E;
+	display:block;
+    font-family: 'MuseoSansLight', sans-serif;
+}
+#live-search ul li .product-price .special,
+#live-search_fixed ul li .product-price .special {
+	color: #D6473E;
+	display:block;
+    font-family: 'MuseoSansLight', sans-serif;
+}
+#live-search ul li .product-price .old,
+#live-search_fixed ul li .product-price .old {
+	color: #A7A7A7;
+	text-decoration: line-through;
+	display:none;
+    font-family: 'MuseoSansLight', sans-serif;
+}
+
+#live-search .product-price > .special,
+#live-search_fixed .product-price > .special {
+	margin-top: -5px;
+}
+
+#live-search .result-text, 
+#live-search_fixed .result-text_fixed {
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
+    color: #e3e3e3;
+    background-color: #E6E6E6;
+}

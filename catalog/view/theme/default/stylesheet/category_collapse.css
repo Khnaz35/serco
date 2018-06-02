@@ -1,0 +1,44 @@
+
+#categories-collapse .accordion-toggle:hover {
+    text-decoration: none;
+}
+#categories-collapse .accordion-toggle:hover span,
+#categories-collapse .accordion-toggle:hover strong {
+    text-decoration: underline;
+}
+#categories-collapse .accordion-toggle:before {
+    font-size: 25px;
+    vertical-align: -3px;
+}
+#categories-collapse .accordion-toggle:not(.collapsed) a:before {
+    content: "▾";
+    margin-right: 0px;
+    position: absolute;
+    right: 5px;
+}
+#categories-collapse .accordion-toggle.collapsed a:before {
+    content: "▸";
+    margin-right: 0;
+    position: absolute;
+    right: 5px;
+}
+#categories-collapse .accordion-toggle:not(.collapsed) a,
+#categories-collapse .accordion-not-toggle:not(.collapsed) a {
+    background: #eee;
+}
+#categories-collapse .accordion-toggle.collapsed a,
+#categories-collapse .accordion-not-toggle.collapsed a {
+    background: #fcfcfc;
+}
+#categories-collapse .accordion-toggle.collapsed a:hover,
+#categories-collapse .accordion-not-toggle.collapsed a:hover {
+    background: #eee;
+}
+#categories-collapse .list-group-item {
+    border-radius: unset;
+}
+#categories-collapse .list-group-item.first_class {}
+#categories-collapse .list-group-item.last_class {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
