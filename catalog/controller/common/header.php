@@ -106,13 +106,6 @@ class ControllerCommonHeader extends Controller {
         //$data['text_transaction'] = $this->language->get('text_transaction');
         //$data['text_download'] = $this->language->get('text_download');
         //$data['text_logout'] = $this->language->get('text_logout');
-        $data['text_shopping_cart'] = $this->language->get('text_shopping_cart');
-        $data['text_page']          = $this->language->get('text_page');
-        $data['text_checkout']      = $this->language->get('text_checkout');
-        $data['text_callback']      = $this->language->get('text_callback');
-        $data['text_contact']       = $this->language->get('text_contact');
-        $data['text_logo']          = $this->language->get('text_logo');
-        $data['text_workingtime']   = $this->language->get('text_workingtime');
 
         //$data['logged'] = $this->customer->isLogged();
         //$data['account'] = $this->url->link('account/account', '', true);
@@ -122,6 +115,15 @@ class ControllerCommonHeader extends Controller {
         //$data['transaction'] = $this->url->link('account/transaction', '', true);
         //$data['download'] = $this->url->link('account/download', '', true);
         //$data['logout'] = $this->url->link('account/logout', '', true);
+
+        $data['text_shopping_cart'] = $this->language->get('text_shopping_cart');
+        $data['text_page']          = $this->language->get('text_page');
+        $data['text_checkout']      = $this->language->get('text_checkout');
+        $data['text_callback']      = $this->language->get('text_callback');
+        $data['text_contact']       = $this->language->get('text_contact');
+        $data['text_logo']          = $this->language->get('text_logo');
+        $data['text_workingtime']   = $this->language->get('text_workingtime');
+
         $data['home']             = $this->url->link('common/home');
         $data['wishlist']         = $this->url->link('account/wishlist', '', true);
         $data['shopping_cart']    = $this->url->link('checkout/cart');
@@ -215,12 +217,6 @@ class ControllerCommonHeader extends Controller {
                 }
             }
         }
-        /*$data['categories'][] = array(
-            'name' => $this->language->get('text_special'),
-            'children' => false,
-            'column'   => 100,
-            'href'  => $this->url->link('product/special')
-        );*/
 
         // Top menu
 
@@ -242,62 +238,8 @@ class ControllerCommonHeader extends Controller {
             'name' => $this->language->get('text_contact'),
             'href' => $this->url->link('information/contact')
         );
-/*
-        $informations = $this->model_catalog_information->getInformations();
 
-        if ($informations) {
-
-            foreach ($informations as $information) {
-                if ($information['information_id'] == 8) {
-
-                    $this->load->model('newsblog/category');
-                    $this->load->language('newsblog/category');
-
-
-                    $articles_id = 2; // ай-ди статей
-
-                    $articles_info = $this->model_newsblog_category->getCategory($articles_id);
-                    if ($articles_info) {
-                        $data['top_pages'][] = array(
-                            'name' => $articles_info['name'],
-                            'href' => $this->url->link('newsblog/category', 'newsblog_path=' . $articles_id)
-                        );
-                    }
-
-
-                    $news_id = 1; //  ай-ди новостей
-
-                    $news_info = $this->model_newsblog_category->getCategory($news_id);
-                    if ($news_info) {
-                        $data['top_pages'][] = array(
-                            'name' => $news_info['name'],
-                            'href' => $this->url->link('newsblog/category', 'newsblog_path=' . $news_id)
-                        );
-                    }
-
-                }
-                if ($information['bottom']) {
-                    $data['top_pages'][] = array(
-                        'name' => $information['title'],
-                        'href'  => $this->url->link('information/information', 'information_id=' . $information['information_id'])
-                    );
-                }
-            }
-        }
-
-        $information_id = 11;
-        $temp_information = $this->model_catalog_information->getInformation($information_id);
-        if ($temp_information) {
-            $data['shops_text'] = $temp_information['title'];
-            $data['shops_link'] = $this->url->link('information/information', 'information_id=' . $information_id);
-        }
-
-        $information_id = 12;
-        $temp_information = $this->model_catalog_information->getInformation($information_id);
-        if ($temp_information) {
-            $data['tailoring_text'] = $temp_information['title'];
-            $data['tailoring_link'] = $this->url->link('information/information', 'information_id=' . $information_id);
-        }*/
+        $data['breadcrumbs'] = $this->load->controller('common/breadcrumbs');
 
         $data['language'] = $this->load->controller('common/language');
         $data['currency'] = $this->load->controller('common/currency');
