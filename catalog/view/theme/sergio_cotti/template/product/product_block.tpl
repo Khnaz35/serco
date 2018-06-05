@@ -18,8 +18,6 @@
                                             class="custom-control-input">
                                     <label class="custom-control-label" for="customRadio50"><?php echo $option_value['name']; ?></label>
                                 </span>
-                                <span class="add-cart-sizes-size"
-                                onclick="cart.add('<?php echo $product['product_id']; ?>', '1', '<?php echo $option['product_option_id']; ?>', '<?php echo $option_value['product_option_value_id']; ?>')"><?php echo $option_value['name']; ?></span>
                             <?php } ?>
                         <?php } ?>
                     </div>
@@ -38,7 +36,9 @@
         <img class="img-fluid" src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" title="<?php echo $product['name']; ?>">
     </a>
     <div class="product-list-info">
-        <span class="product-list-fav" onlick="wishlist.add(<?php echo $product['product_id']; ?>)"><i class="fal fa-heart"></i></span>
+        <span   class="product-list-fav"
+                data-product_id="<?php echo $product['product_id']; ?>"
+                onclick="wishlist.add(<?php echo $product['product_id']; ?>)"><i class="fal fa-heart"></i></span>
         <span class="product-list-name"><?php echo $product['name']; ?></span>
         <?php if ($product['price']) { ?>
             <?php if (!$product['special']) { ?>

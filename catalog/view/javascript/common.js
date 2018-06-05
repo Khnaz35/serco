@@ -22,23 +22,17 @@ function getURLVar(key) {
     }
 }
 
-
 $(document).ready(function() {
 
     $('.variation').on('click', function(e) {
-
         $('.add-cart-sizes-container').toggleClass("collapsed ");
-        e.preventDefault();
-    });
-    $('.variation').on('click', function(e) {
-
         $('.add-cart-step--active').toggleClass("d-none ");
         e.preventDefault();
     });
 
-
     $( ".header-search" ).click(function() {
         $('.search-fixed').addClass('opened');
+        e.preventDefault();
     });
 
     $( ".search-close" ).click(function() {
@@ -154,50 +148,12 @@ $(document).ready(function() {
         }
     });
 
-    // Product List
-    $('#list-view').click(function() {
-        $('#content .product-grid > .clearfix').remove();
-
-        $('#content .row > .product-grid').attr('class', 'product-layout product-list col-xs-12');
-        $('#grid-view').removeClass('active');
-        $('#list-view').addClass('active');
-
-        localStorage.setItem('display', 'list');
-    });
-
-    // Product Grid
-    $('#grid-view').click(function() {
-        // What a shame bootstrap does not take into account dynamically loaded columns
-        var cols = $('#column-right, #column-left').length;
-
-        if (cols == 2) {
-            $('#content .product-list').attr('class', 'product-layout product-grid col-lg-6 col-md-6 col-sm-12 col-xs-12');
-        } else if (cols == 1) {
-            $('#content .product-list').attr('class', 'product-layout product-grid col-lg-4 col-md-4 col-sm-6 col-xs-12');
-        } else {
-            $('#content .product-list').attr('class', 'product-layout product-grid col-lg-3 col-md-3 col-sm-6 col-xs-12');
-        }
-
-        $('#list-view').removeClass('active');
-        $('#grid-view').addClass('active');
-
-        localStorage.setItem('display', 'grid');
-    });
-
-    if (localStorage.getItem('display') == 'list') {
-        $('#list-view').trigger('click');
-        $('#list-view').addClass('active');
-    } else {
-        $('#grid-view').trigger('click');
-        $('#grid-view').addClass('active');
-    }
-
-    // Checkout
+    /*// Checkout
     $(document).on('keydown', '#collapse-checkout-option input[name=\'email\'], #collapse-checkout-option input[name=\'password\']', function(e) {
         if (e.keyCode == 13) {
             $('#collapse-checkout-option #button-login').trigger('click');
         }
-    });
+    });*/
 
     // tooltips on hover
     $('[data-toggle=\'tooltip\']').tooltip({container: 'body',trigger: 'hover'});
@@ -401,6 +357,10 @@ var wishlist = {
 
                     //$('#wishlist-total span').html(json['total']);
                     $('#wishlist-total').attr('title', json['total']);
+                    $("span[data-product_id='" + product_id + "']").each(function() {
+                        $(this).attr("onclick","wishlist.remove('"+ product_id +"');");
+                        $(this).children('i').addClass("active-fa-heart");
+                    });
                 }
 
                 //$('html, body').animate({ scrollTop: 0 }, 'slow');
@@ -410,8 +370,26 @@ var wishlist = {
             }
         });
     },
-    'remove': function() {
+    'remove': function(product_id) {
+        $.ajax({
+            url: 'index.php?route=account/wishlist/remove',
+            type: 'post',
+            data: 'product_id=' + product_id,
+            dataType: 'json',
+            success: function(json) {
+                if (json['success']) {
+                    $("span[data-product_id='" + product_id + "']").each(function() {
+                        $(this).attr("onclick","wishlist.add('"+ product_id +"');");
+                        $(this).children('i').removeClass("active-fa-heart");
+                    });
+                }
 
+                $('.wishlist_menu').html(json['total']);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
     }
 }
 
