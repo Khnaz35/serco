@@ -133,6 +133,7 @@ class ControllerProductCategory extends Controller {
 			$data['text_known'] = $this->language->get('text_known');
 			$data['text_known_opt'] = $this->language->get('text_known_opt');
 			$data['text_more'] = $this->language->get('text_more');
+			$data['text_choose_size'] = $this->language->get('text_choose_size');
 //end
 			$data['button_wishlist'] = $this->language->get('button_wishlist');
 			$data['button_compare'] = $this->language->get('button_compare');
@@ -298,7 +299,7 @@ class ControllerProductCategory extends Controller {
 						);
                     }
 				}
-                if ($option['option_id'] == 14) {
+                if ($option['option_id'] == 74) {
     				$product_options[] = array(
     					'product_option_id'    => $option['product_option_id'],
     					'product_option_value' => $product_option_value_data,
