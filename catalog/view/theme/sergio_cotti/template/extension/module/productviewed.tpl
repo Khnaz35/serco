@@ -5,7 +5,9 @@
         <div class="swiper-container swiper-container-js swiper-container-horizontal swiper-initiated">
             <div class="swiper-wrapper">
                 <?php foreach ($products as $product) { ?>
-                    <?php include('catalog/view/theme/'.$config_theme.'/template/product/product_block.tpl'); ?>
+                    <div class="swiper-slide">
+                        <?php include('catalog/view/theme/'.$config_theme.'/template/product/product_block.tpl'); ?>
+                    </div>
                 <?php } ?>
             </div>
             <!-- If we need navigation buttons-->
