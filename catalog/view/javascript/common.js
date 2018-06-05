@@ -378,6 +378,7 @@ var wishlist = {
             dataType: 'json',
             success: function(json) {
                 if (json['success']) {
+                    $('#wishlist-total').attr('title', json['total']);
                     $("span[data-product_id='" + product_id + "']").each(function() {
                         $(this).attr("onclick","wishlist.add('"+ product_id +"');");
                         $(this).children('i').removeClass("active-fa-heart");
