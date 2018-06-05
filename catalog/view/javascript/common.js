@@ -25,6 +25,18 @@ function getURLVar(key) {
 
 $(document).ready(function() {
 
+    $('.variation').on('click', function(e) {
+
+        $('.add-cart-sizes-container').toggleClass("collapsed ");
+        e.preventDefault();
+    });
+    $('.variation').on('click', function(e) {
+
+        $('.add-cart-step--active').toggleClass("d-none ");
+        e.preventDefault();
+    });
+
+
     $( ".header-search" ).click(function() {
         $('.search-fixed').addClass('opened');
     });
@@ -52,6 +64,16 @@ $(document).ready(function() {
                     "<a class='fab fa-facebook-f' href='#/'></a>"
                 ]
             }
+        ]
+    });
+    $('#shoppingbag').mmenu({
+        "navbar": {
+            "title": 'Фильтры'
+        },
+        "extensions": [
+            "pagedim-black",
+            "theme-white",
+            "position-right"
         ]
     });
 

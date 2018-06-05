@@ -5,13 +5,13 @@
  * Support: support@giantleaplab.com
  */
 (function($){
-    
+
 if (typeof BrainyFilter === 'undefined') {
     var BrainyFilter = {
 
         ajaxHandler: null,
 
-        sliderId: ".bf-slider-range",
+        sliderId: "#range_03",
 
         filterFormId: ".bf-form",
 
@@ -20,7 +20,7 @@ if (typeof BrainyFilter === 'undefined') {
         minFieldId: "[name='bfp_price_min']",
 
         max: 0,
-        min: 0,
+        min: 1,
         lowerValue : 0,
         higherValue : 0,
 
@@ -39,20 +39,20 @@ if (typeof BrainyFilter === 'undefined') {
         redirectTo: '',
         baseUrl: '',
         currentRoute: '',
-        
+
         isInitialized: false,
 
         init: function() {
             this.isInitialized = true;
-            this.ajaxEnabled = !isIE() && $(this.selectors.container).size() 
-                                       && $(this.selectors.paginator).size();
+            this.ajaxEnabled = !isIE() && $(this.selectors.container).length
+                                       && $(this.selectors.paginator).length;
             this.redirectTo = this.redirectTo.replace('&amp;', '&');
 
             $(this.sliderId).each(function(){
                 var $slider = $(this),
                     sliderType = parseInt($slider.data('slider-type'));
                 $slider[0].slide = null;
-                $slider.slider({
+                /*$slider.slider({
                     range: true,
                     min: BrainyFilter.min,
                     max: BrainyFilter.max,
@@ -62,16 +62,31 @@ if (typeof BrainyFilter === 'undefined') {
                         $(BrainyFilter.maxFieldId).val(ui.values[1]);
                     },
                     stop : function(){ BrainyFilter.currentSendMethod($(this)); }
+                });*/
+                $slider.ionRangeSlider({
+                    type: "double",
+                    min: BrainyFilter.lowerValue,
+                    max: BrainyFilter.higherValue,
+                    from: BrainyFilter.min,
+                    to:  BrainyFilter.max,
+                    postfix: "грн",
+                    hide_min_max: true,
+                    extra_classes: "switch-slider",
+                    onChange: function (data) {
+                        $(BrainyFilter.minFieldId).val(data['from']);
+                        $(BrainyFilter.maxFieldId).val(data['to']);
+                        //BrainyFilter.currentSendMethod($(this));
+                    },
+                    onFinish: function (data) {
+                        BrainyFilter.currentSendMethod($(this));
+                    }
                 });
-                if (sliderType === 2 || sliderType === 3) {
-                    BrainyFilter.priceSliderLabels($slider);
-                }
             });
-            
-            $('.bf-price-container input').keyup(function() {
-                var $inp = $(this), 
+
+            $('.box-slide-range input').keyup(function() {
+                var $inp = $(this),
                     index = ($inp.hasClass("bf-range-max")) ? 1 : 0;
-                (index) ? $(".bf-range-max").val($inp.val()) 
+                (index) ? $(".bf-range-max").val($inp.val())
                         : $(".bf-range-min").val($inp.val());
                 $(BrainyFilter.sliderId).slider("values", index, $inp.val());
             });
@@ -98,7 +113,8 @@ if (typeof BrainyFilter === 'undefined') {
                 this.getTotalByAttr();
             }
 
-            $(this.filterFormId).find('select, input').change(function(){
+            $(this.filterFormId).find('select, input:not(#range_03)').change(function(){
+
                 var fid = $(this).data('filterid');
                 if (fid) {
                     var $input = $('input[data-filterid='+fid+']');
@@ -112,7 +128,7 @@ if (typeof BrainyFilter === 'undefined') {
             });
 
             $(this.filterFormId).find('input[type="checkbox"], input[type="radio"]').change(function(){
-                if (!$(this).closest('.bf-attr-filter').find('.bf-count').size()) {
+                if (!$(this).closest('.custom-control').find('.bf-count').length) {
                     BrainyFilter.addCross($(this));
                 }
             });
@@ -137,11 +153,11 @@ if (typeof BrainyFilter === 'undefined') {
             this.rebindSearchAction();
 
             this.collapse();
-            
+
             this.initHorizontalView();
 
             this.initAbsolutePosition();
-            
+
             this.addBFilterParam();
         },
 
@@ -173,7 +189,7 @@ if (typeof BrainyFilter === 'undefined') {
                     labels.splice(labels.length, 0, {n:''});
                     values[0] = isNaN(values[0]) ? 0 : values[0];
                     values[1] = isNaN(values[1]) ? labels.length - 1 : values[1];
-                    
+
                 $slider.slider({
                     range: true,
                     min: 0,
@@ -194,7 +210,7 @@ if (typeof BrainyFilter === 'undefined') {
                     },
                     stop : function(){ BrainyFilter.currentSendMethod($(this)); }
                 });
-                
+
                 var changeSlider = function(){
                     var $slider = $(this).closest('.bf-attr-filter').find('.bf-slider-container'),
                         id = $slider.data('slider-group'),
@@ -219,7 +235,7 @@ if (typeof BrainyFilter === 'undefined') {
                 };
                 minLbl.keyup(changeSlider);
                 maxLbl.keyup(changeSlider);
-                
+
                 if (sliderType === 2 || sliderType === 3) {
                     BrainyFilter.addSliderLabels($slider, labels);
                 }
@@ -227,7 +243,7 @@ if (typeof BrainyFilter === 'undefined') {
         },
 
         initGrid : function() {
-            $('.bf-grid input').each(function(){ 
+            $('.bf-grid input').each(function(){
                 var sel = function(el){
                     if (el.is(':checked')) {
                         el.closest('.bf-grid').find('.bf-grid-item').removeClass('selected');
@@ -240,34 +256,22 @@ if (typeof BrainyFilter === 'undefined') {
         },
 
         addCross: function($obj) {
+
             var fid = $obj.data('filterid');
 
             $('input[data-filterid='+fid+']').each(function(){
                 var checkbox = $(this);
-                var parent = checkbox.closest('.bf-attr-filter');
-                if($obj[0].checked) { 
-                    if (checkbox.is("input[type='radio']")) {
-                        checkbox.parents('.bf-attr-block').find('.bf-cross').remove();
-                    }
-                    var cross = $('<span class="bf-cross" data-filterid="'+fid+'"></span>');
-                    cross.click(function(){
-                        var fid = $(this).data('filterid');
-                        var $cross = $('.bf-cross[data-filterid='+fid+']');
-                        $cross.closest('.bf-attr-filter').find('input').removeAttr('checked');
+                if($obj[0].checked) {
+                    checkbox.click(function(){
+                        $(this).removeAttr('checked');
                         BrainyFilter.currentSendMethod($(this));
-                        $cross.hide();
-                        setTimeout(function(){$cross.remove();}, 500);
                     });
-                    parent.find('.bf-c-3').html(cross);
                     checkbox.attr('checked', 'checked');
-                    parent.find('.bf-c-2').addClass('bf-c-2-checked');
                     checkbox[0].checked = true;
                 } else {
-                    parent.find('.bf-cross').remove();
                     if (checkbox[0].checked) {
                         checkbox.removeAttr('checked');
                     }
-                    parent.find('.bf-c-2').removeClass('bf-c-2-checked');
                 }
             });
         },
@@ -312,8 +316,8 @@ if (typeof BrainyFilter === 'undefined') {
         },
 
         currentSendMethod: function($elem){
-            var submitType = $elem.closest(BrainyFilter.filterFormId).data('submit-type');
-            var submitDelay = $elem.closest(BrainyFilter.filterFormId).data('submit-delay');
+            var submitType = $(BrainyFilter.filterFormId).data('submit-type');
+            var submitDelay = $(BrainyFilter.filterFormId).data('submit-delay');
             switch(submitType) {
                 case 'auto':
                     BrainyFilter.sendRequest();
@@ -335,14 +339,14 @@ if (typeof BrainyFilter === 'undefined') {
                 // hide results until response will be recieved
                 $('.bf-panel-wrapper').addClass('bf-panel-hidden');
                 $('.bf-panel-wrapper').append('<div class="ajax-shadow"></div>');
-                
+
                 if(this.ajaxHandler && this.ajaxHandler.readystate !== 4){
                     this.ajaxHandler.abort();
                 }
 
                 this.ajaxHandler = $.ajax({
-                    url: window.location.origin + BrainyFilter.baseUrl +'index.php' 
-                            + BrainyFilter.prepareFilterData(false, 'module/brainyfilter/ajaxfilter') 
+                    url: window.location.origin + BrainyFilter.baseUrl +'index.php'
+                            + BrainyFilter.prepareFilterData(false, 'module/brainyfilter/ajaxfilter')
                             + '&count=' + (BrainyFilter.requestCount ? '1' : '0')
                             + '&price=' + (BrainyFilter.requestPrice ? '1' : '0')
                             + '&curRoute=' + BrainyFilter.currentRoute,
@@ -357,23 +361,23 @@ if (typeof BrainyFilter === 'undefined') {
                         });
                         var newUrl   = window.location.origin + BrainyFilter.prepareFilterData(true, false);
 
-                        if ($(BrainyFilter.sliderId).size()) {
+                        if ($(BrainyFilter.sliderId).length) {
                             BrainyFilter.changePriceSlider(res.min, res.max);
                         };
-                        
+
                         BrainyFilter.historyPushState(res, newUrl);
 
                         window.onpopstate = BrainyFilter.onHistoryPopState;
 
                         BrainyFilter.selectionCache = BrainyFilter.serializeMultipleForms();
-                        
+
                         $(document).trigger('productlistchange');
                     },
                     complete: function() {
                         $('.bf-panel-wrapper .ajax-shadow').remove();
                         $('.bf-panel-wrapper').removeClass('bf-panel-hidden');
                     }
-                }); 
+                });
             }else{
                 var newUrl;
                 if (BrainyFilter.redirectTo) {
@@ -383,10 +387,10 @@ if (typeof BrainyFilter === 'undefined') {
                 }
                 window.location = newUrl;
             }
-        }, 
-        
+        },
+
         updateProductList: function(html, bfData) {
-            var $gridBtn = $('#grid-view').clone(true), 
+            var $gridBtn = $('#grid-view').clone(true),
                 $listBtn = $('#list-view').clone(true),
                 $html    = $(html),
                 $prodCont = $html.find(BrainyFilter.selectors.container),
@@ -394,16 +398,16 @@ if (typeof BrainyFilter === 'undefined') {
                 $emptyMsg = $('<p/>', {'class': 'bf-empty-product-list-msg'}).html(bfLang.empty_list)
                 ;
 
-            if ($prodCont.size()) {
+            if ($prodCont.length) {
                 $(BrainyFilter.selectors.container).html($prodCont.html());
                 $(BrainyFilter.selectors.paginator).html($paginCont.html());
             } else {
                 $(BrainyFilter.selectors.container).html($emptyMsg);
                 $(BrainyFilter.selectors.paginator).html('');
             }
-            
+
             BrainyFilter.addBFilterParam();
-            
+
             $('#grid-view').replaceWith($gridBtn);
             $('#list-view').replaceWith($listBtn);
             try {
@@ -411,7 +415,7 @@ if (typeof BrainyFilter === 'undefined') {
                     if (typeof $.totalStorage !== 'undefined') {
                         display($.totalStorage('display'));
                     } else if (typeof $.cookie !== 'undefined'){
-                        display($.cookie('display')); 
+                        display($.cookie('display'));
                     }
                 } else
                 if (typeof dataAnimate === 'function') { //support for Boss Themes animation
@@ -433,7 +437,7 @@ if (typeof BrainyFilter === 'undefined') {
             BrainyFilter.hideEmptySections();
             BrainyFilter.initHorizontalScrolls();
         },
-        
+
         historyPushState: function(data, url) {
             var selection = {}, sliderState = {};
            $('.bf-form').find('input, select').each(function(){
@@ -445,7 +449,7 @@ if (typeof BrainyFilter === 'undefined') {
                }
            });
            $('.bf-form').find('.ui-slider').each(function(){
-               var $this = $(this), 
+               var $this = $(this),
                name = $this.parent().hasClass('bf-price-slider-container') ? 'price' : $this.data('slider-group');
                sliderState[name] = {
                    values : $this.slider('option', 'values'),
@@ -455,7 +459,7 @@ if (typeof BrainyFilter === 'undefined') {
            });
            window.history.pushState({data: data, selection : selection, sliderState : sliderState}, document.title, url);
         },
-        
+
         onHistoryPopState: function(e) {
             if(e.state.data){
                 var $ctrls = $('.bf-form').find('input, select');
@@ -471,8 +475,8 @@ if (typeof BrainyFilter === 'undefined') {
                     }
                 }
                 for (var name in e.state.sliderState) {
-                    var $slider = name === 'price' 
-                        ? $('.bf-form .bf-price-slider-container .ui-slider') 
+                    var $slider = name === 'price'
+                        ? $('.bf-form .bf-price-slider-container .ui-slider')
                         : $('.bf-form .ui-slider[data-slider-group='+name+']');
 
                     $slider.slider('option', 'max', e.state.sliderState[name].max);
@@ -482,9 +486,9 @@ if (typeof BrainyFilter === 'undefined') {
                 BrainyFilter.updateProductList(e.state.data.products, e.state.data.brainyfilter);
             }
         },
-        
+
         addBFilterParam: function() {
-            var self = BrainyFilter, 
+            var self = BrainyFilter,
                 bfilter = BrainyFilter.serializeFilterForm();
             $.fn.bfparam = function(bfparam){
                 if (bfparam !== '') {
@@ -572,8 +576,8 @@ if (typeof BrainyFilter === 'undefined') {
             }
 
             $('.bf-slider-container').each(function(){
-                var $slider = $(this), 
-                    $cont = $slider.closest('.bf-slider'), 
+                var $slider = $(this),
+                    $cont = $slider.closest('.bf-slider'),
                     values = $slider.slider('option', 'values');
                 if (values[0] === 0) {
                     var name = $cont.find('[data-min-limit]').attr('name');
@@ -651,7 +655,7 @@ if (typeof BrainyFilter === 'undefined') {
         },
 
         serializeMultipleForms : function() {
-            if ($(this.filterFormId).size() === 1) {
+            if ($(this.filterFormId).length === 1) {
                 return $(this.filterFormId).serialize();
             }
             var params = $(this.filterFormId).serializeArray();
@@ -673,16 +677,16 @@ if (typeof BrainyFilter === 'undefined') {
 
         serializeSearchForm : function() {
             var $search = $('#content').find('[name=search]');
-            if ($search.size() && $search.val() !== '') {
+            if ($search.length && $search.val() !== '') {
                 var str = 'search=' + encodeURIComponent($search.val());
                 var cat = $('#content').find('[name=category_id]').val();
                 if (parseInt(cat) > 0) {
                     str += '&category_id=' + cat;
                 }
-                if ($('#content').find('[name=sub_category]:checked').size()) {
+                if ($('#content').find('[name=sub_category]:checked').length) {
                     str += '&sub_category=true';
                 }
-                if ($('#content').find('[name=description]:checked').size()) {
+                if ($('#content').find('[name=description]:checked').length) {
                     str += '&description=true';
                 }
                 return str;
@@ -700,7 +704,7 @@ if (typeof BrainyFilter === 'undefined') {
 
         getTotalByAttr: function() {
             $.ajax({
-                url: window.location.origin + BrainyFilter.baseUrl + 'index.php' 
+                url: window.location.origin + BrainyFilter.baseUrl + 'index.php'
                         + BrainyFilter.prepareFilterData(false, 'module/brainyfilter/ajaxfilter&count=' + (BrainyFilter.requestCount ? '1' : '0') + '&price=' + (BrainyFilter.requestPrice ? '1' : '0')),
                 dataType:'json',
                 type: 'get',
@@ -713,7 +717,7 @@ if (typeof BrainyFilter === 'undefined') {
                         BrainyFilter.changePriceSlider(res.min, res.max);
                     }
                 }
-            }); 
+            });
         },
 
         changeTotalNumbers: function(data) {
@@ -731,14 +735,14 @@ if (typeof BrainyFilter === 'undefined') {
                 $checkedBlks = $form.find('.bf-attr-filter input[type=checkbox]')
                 .filter(':checked')
                 .parents('.bf-attr-block');
-            
+
             $ctrls.attr('disabled', 'disabled')
                 .not('option')
                 .parents('.bf-attr-filter')
                 .addClass('bf-disabled');
 
             $ctrls.each(function(){
-                var $this = $(this), 
+                var $this = $(this),
                 name = $this.prop('tagName') === 'OPTION' ? $this.parent().attr('name') : $this.attr('name'),
                 gid  = name.replace(/(bfp_)([^_]+)(.*)/, '$2'),
                 val  = $this.attr('value');
@@ -752,7 +756,7 @@ if (typeof BrainyFilter === 'undefined') {
                     $this.removeAttr('disabled');
                 }
             });
-            
+
             $checkedBlks.find('.bf-disabled').each(function(){
                 var $this = $(this);
                 $this.removeClass('bf-disabled').find('.bf-cell').last().append('<span class="bf-count bf-empty">0</span>');
@@ -764,7 +768,7 @@ if (typeof BrainyFilter === 'undefined') {
             });
             // disable select box if it hasn't any active option
             $form.find('select').each(function(){
-                if ($(this).find('option').not('.bf-default,[disabled]').size() === 0) {
+                if ($(this).find('option').not('.bf-default,[disabled]').length === 0) {
                     $(this).attr('disabled', 'true');
                 }
             });
@@ -808,7 +812,7 @@ if (typeof BrainyFilter === 'undefined') {
             });
 
         },
-        
+
         initHorizontalScrolls : function() {
             var scroll = function(block, direction) {
                 var $block = $(block);
@@ -830,12 +834,12 @@ if (typeof BrainyFilter === 'undefined') {
                 });
                 $block.find('.bf-attr-block-cont').stop().animate({left: "-"+ newOffset +"px"}, 1200);
             };
-            
+
             var filterRows = $('.bf-horizontal').find('.bf-attr-block')
                     .not('.bf-keywords-filter')
                     .not('.bf-price-filter')
                     .not('.bf-slider');
-            
+
             filterRows.each(function(){
                 var scrollBlockWidth = 0;
                 $(this).find('.bf-row').filter(':visible').each(function(){
@@ -879,24 +883,22 @@ if (typeof BrainyFilter === 'undefined') {
             });
              /*END*/
         },
-        
+
         changePriceSlider: function(min, max) {
+
             $(this.sliderId).each(function(){
                 var $slider = $(this),
                     sliderType = parseInt($slider.data('slider-type')),
-                    priceCont = $slider.closest('.bf-price-container'),
-                    minVal = parseFloat(priceCont.find(BrainyFilter.minFieldId).val()),
-                    maxVal = parseFloat(priceCont.find(BrainyFilter.maxFieldId).val()),
+                    minVal = $(BrainyFilter.minFieldId).val(),
+                    maxVal = $(BrainyFilter.maxFieldId).val(),
                     vals = [minVal, maxVal],
-                    curMin = $slider.slider('option', 'min'),
-                    curMax = $slider.slider('option', 'max');
+                    curMin = $slider.data('from'),
+                    curMax = $slider.data('to');
                 min = parseFloat(min);
                 max = parseFloat(max);
 
                 BrainyFilter.max = max;
                 BrainyFilter.min = min;
-                $slider.slider('option', 'min', min);
-                $slider.slider('option', 'max', max);
                 if (vals[0] === curMin || vals[0] < min) {
                     vals[0] = min;
                 }
@@ -906,14 +908,20 @@ if (typeof BrainyFilter === 'undefined') {
                 if (vals[0] > vals[1]) {
                     vals[1] = vals[0];
                 }
-                $slider.slider('option', 'values', vals);
+
+                $slider.data("ionRangeSlider").update({
+                    min: min,
+                    max: max,
+                    from: min,
+                    to: max
+                });
 
                 if (sliderType === 2 || sliderType === 3) {
                     BrainyFilter.priceSliderLabels($slider);
                 }
-                
-                priceCont.find(BrainyFilter.minFieldId).val(vals[0]);
-                priceCont.find(BrainyFilter.maxFieldId).val(vals[1]);
+
+                $(BrainyFilter.minFieldId).val(vals[0]);
+                $(BrainyFilter.maxFieldId).val(vals[1]);
             });
         },
 
@@ -945,7 +953,7 @@ if (typeof BrainyFilter === 'undefined') {
                 var panelHeight = panel.outerHeight();
                 var panelWidth  = panel.outerWidth();
                 var blockWidth  = $(this).closest('.brainyfilter-panel').outerWidth();
-                var panelNewLeft = (outBlockOffset.left + blockWidth + panelWidth > winWidth) 
+                var panelNewLeft = (outBlockOffset.left + blockWidth + panelWidth > winWidth)
                     ? outBlockOffset.left - panelWidth + 4
                     : outBlockOffset.left + blockWidth - 4;
                 if (panel.css('display') === 'block') {
@@ -991,8 +999,8 @@ if (typeof BrainyFilter === 'undefined') {
                 var visibleItems = parseInt($form.data('visible-items'));
                 var hideItems = parseInt($form.data('hide-items'));
                 $form.find('.bf-attr-block-cont').each(function(i, v) {
-                    var $this = $(this), 
-                        firstInit = false, 
+                    var $this = $(this),
+                        firstInit = false,
                         wrapper = $this.parent();
                     if (!$this.parent().is('.bf-sliding')) {
                         $this.wrap('<div class="bf-sliding"></div>');
@@ -1002,7 +1010,7 @@ if (typeof BrainyFilter === 'undefined') {
                         firstInit = true;
                     }
                     if (enableSliding) {
-                        var count = $this.find('.bf-attr-filter').filter(':visible').size() - visibleItems;
+                        var count = $this.find('.bf-attr-filter').filter(':visible').length - visibleItems;
                         if ( count > 0 && count >= hideItems) {
                             if ($this.parent().hasClass('bf-expanded') && !firstInit) {
                                 BrainyFilter.expandBlock(v);
@@ -1036,7 +1044,7 @@ if (typeof BrainyFilter === 'undefined') {
                 });
             });
         },
-        
+
         shrinkBlock: function(block, items, disableAnim) {
             // disable for horizontal view
             if ($(block).closest('.bf-check-position').hasClass('bf-horizontal')) {
@@ -1044,7 +1052,7 @@ if (typeof BrainyFilter === 'undefined') {
             }
             var $form = $(block).closest(BrainyFilter.filterFormId);
             var visibleItems = parseInt($form.data('visible-items'));
-            var count   = $(block).find('.bf-attr-filter').filter(':visible').size() - visibleItems;
+            var count   = $(block).find('.bf-attr-filter').filter(':visible').length - visibleItems;
             var height  = 0;
             var wrapper = $(block).closest('.bf-sliding-cont');
             var showMore = wrapper.find('.bf-sliding-show').addClass('bf-hidden');
@@ -1054,8 +1062,8 @@ if (typeof BrainyFilter === 'undefined') {
                         height += $(vv).height();
                     }
                 });
-                if (!showMore.size()) {
-                    wrapper.append('<div class="bf-sliding-show" ></div>'); 
+                if (!showMore.length) {
+                    wrapper.append('<div class="bf-sliding-show" ></div>');
                 }
                 wrapper.find('.bf-sliding-show')
                     .text(bfLang.show_more + ' (' + count + ')')
@@ -1115,12 +1123,12 @@ if (typeof BrainyFilter === 'undefined') {
             $('.bf-collapse').parents('.bf-attr-block').find('.bf-sliding').stop().animate({height: height}, 300);
 
         },
-        
+
         hideEmptySections : function() {
             $('.bf-attr-block').each(function(){
                 var $this = $(this);
                 $this.removeClass('bf-hidden');
-                if ($this.find('.bf-attr-filter').filter(':visible').size()) {
+                if ($this.find('.bf-attr-filter').filter(':visible').length) {
                     $this.removeClass('bf-hidden');
                 } else {
                     $this.addClass('bf-hidden');
@@ -1129,21 +1137,21 @@ if (typeof BrainyFilter === 'undefined') {
             $('.bf-attr-group-header').each(function(){
                 var $this = $(this);
                 $this.removeClass('bf-hidden');
-                if ($this.nextUntil('.bf-attr-group-header', '.bf-attr-block').filter(':visible').size()
-                        || $this.next('.bf-attr-block-wrapper').find('.bf-attr-filter').filter(':visible').size()) {
+                if ($this.nextUntil('.bf-attr-group-header', '.bf-attr-block').filter(':visible').length
+                        || $this.next('.bf-attr-block-wrapper').find('.bf-attr-filter').filter(':visible').length) {
                     $this.removeClass('bf-hidden');
                 } else {
                     $this.addClass('bf-hidden');
                 }
             });
         },
-        
+
         initAbsolutePosition : function() {
             var $layout = $('.bf-responsive').eq(0),
                 $form = $layout.find(BrainyFilter.filterFormId),
                 $fixedLayout = $layout.find('.bf-check-position'),
                 curSubmitType, isHorizontal;
-            
+
             var checkWidth = function(){
                 var p = 15,
                     w = $(window).width(),
@@ -1186,7 +1194,7 @@ if (typeof BrainyFilter === 'undefined') {
                     letBodyScroll();
                 }
             };
-            
+
             var preventBodyScroll = function() {
                 var $body = $('body');
                 var $doc = $(document);
@@ -1197,15 +1205,15 @@ if (typeof BrainyFilter === 'undefined') {
             };
             var letBodyScroll = function() {
                 var $body = $('body.bf-non-scrollable');
-                if ($body.size()) {
+                if ($body.length) {
                     $body.removeClass('bf-non-scrollable');
                     $(document).scrollTop(-parseInt($body.css('top')));
                     $(document).scrollLeft(-parseInt($body.css('left')));
                     $body.css({'top' : 'auto', 'left' : 'auto'});
                 }
             };
-            
-            if ($layout.size()) {
+
+            if ($layout.length) {
                 $layout.before('<div id="bf-brainyfilter-anchor"></div>');
 //                $form = $layout.find(BrainyFilter.filterFormId);
                 curSubmitType = $form.data('submit-type');
@@ -1222,7 +1230,7 @@ if (typeof BrainyFilter === 'undefined') {
             }
             checkWidth();
         },
-        
+
         addSliderLabels : function($slider, labels, showExtrems) {
             var $lbl = $('<span />', {'class': 'bf-slider-label'}),
                 w = $slider.outerWidth(),
@@ -1231,18 +1239,18 @@ if (typeof BrainyFilter === 'undefined') {
                 dxp = 100 / n,
                 $labels = [],
                 line = 0;
-        
+
             $slider.find('.bf-slider-label').remove();
-            
+
             $.each(labels, function(i, v){
                 if ((!i || i === n) && !showExtrems) return;
                 var offset = dxp * i,
                     $l = $lbl.clone();
-                
+
                 $slider.append($l);
                 $l.text(typeof v.n !== 'undefined' ? v.n : v);
                 var lw = $l.width(), marg = (!i) ? 0 : ((i === n) ? -lw : -lw / 2);
-                
+
                 if (i === 1) {
                     line = lw;
                 } else {
@@ -1258,11 +1266,11 @@ if (typeof BrainyFilter === 'undefined') {
                         line = lblLeft + lw;
                     }
                 }
-                
+
                 $l.css({left: offset + '%', 'margin-left' : marg});
                 $labels.push($l);
             });
-            
+
         },
         priceSliderLabels : function($slider){
             var w = $slider.outerWidth(),
@@ -1271,7 +1279,7 @@ if (typeof BrainyFilter === 'undefined') {
                 n = Math.floor(w / d),
                 dx = w / n,
                 labels = [BrainyFilter.currencySymb + BrainyFilter.min.toFixed(2)];
-                
+
             for (var i = 1; i < n; i ++) {
                 var p = Math.round(BrainyFilter.min + i * dx / w * (BrainyFilter.max - BrainyFilter.min));
                 labels.push(BrainyFilter.currencySymb + p.toFixed(2));
@@ -1284,9 +1292,9 @@ if (typeof BrainyFilter === 'undefined') {
 }
 if (typeof isIE === 'undefined') {
     function isIE(){
-        if ((document.all && document.querySelector && !document.addEventListener) 
-         || (document.all && !document.querySelector) 
-         || (document.all && document.querySelector && document.addEventListener && 
+        if ((document.all && document.querySelector && !document.addEventListener)
+         || (document.all && !document.querySelector)
+         || (document.all && document.querySelector && document.addEventListener &&
         !window.atob)) {
             return true;
         }else{
