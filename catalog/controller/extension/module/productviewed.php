@@ -61,8 +61,12 @@ class ControllerExtensionModuleProductviewed extends Controller{
 					$price = false;
 				}
 
-				if ((float) $result['special']) {
+
+           		$special_rate = 0;
+
+				if ((float)$result['special']) {
 					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					$special_rate = '-' . round(($result['price'] - $result['special']) / $result['price'] * 100, 0) . '%';
 				} else {
 					$special = false;
 				}
