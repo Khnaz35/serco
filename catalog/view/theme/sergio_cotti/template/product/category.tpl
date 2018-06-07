@@ -24,12 +24,12 @@
             <?php } ?>
             <?php if ($products) { ?>
                 <!-- product-list -->
-                <div class="product-list col-lg-8 ">
+                <div class="product-list col-lg-10 col-md-8 ">
                     <div class="container-fluid">
                         <div class="row">
                             <?php foreach ($products as $product) { ?>
                                 <!-- product-item -->
-                                <div class="product-list-item col-lg-6 col-md-6 col-sm-6">
+                                <div class="product-list-item col-lg-4 col-md-6 col-sm-6">
                                     <?php include('catalog/view/theme/'.$config_theme.'/template/product/product_block.tpl'); ?>
                                 </div>
                                 <!-- product-item end-->
