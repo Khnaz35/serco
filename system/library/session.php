@@ -26,7 +26,7 @@ class Session {
 				exit('Error: Invalid session ID!');
 			}
 
-			session_set_cookie_params(2678400, '/');
+			session_set_cookie_params(0, '/');
 			session_start();
 		}
 	}
