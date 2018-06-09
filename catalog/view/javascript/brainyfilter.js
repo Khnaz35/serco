@@ -20,7 +20,7 @@ if (typeof BrainyFilter === 'undefined') {
         minFieldId: "[name='bfp_price_min']",
 
         max: 0,
-        min: 1,
+        min: 0,
         lowerValue : 0,
         higherValue : 0,
 
@@ -52,27 +52,18 @@ if (typeof BrainyFilter === 'undefined') {
                 var $slider = $(this),
                     sliderType = parseInt($slider.data('slider-type'));
                 $slider[0].slide = null;
-                /*$slider.slider({
-                    range: true,
-                    min: BrainyFilter.min,
-                    max: BrainyFilter.max,
-                    values: [BrainyFilter.lowerValue, BrainyFilter.higherValue],
-                    slide: function( event, ui ) {
-                        $(BrainyFilter.minFieldId).val(ui.values[0]);
-                        $(BrainyFilter.maxFieldId).val(ui.values[1]);
-                    },
-                    stop : function(){ BrainyFilter.currentSendMethod($(this)); }
-                });*/
                 $slider.ionRangeSlider({
                     type: "double",
                     min: BrainyFilter.lowerValue,
-                    max: BrainyFilter.higherValue,
+                    max: BrainyFilter.max,
                     from: BrainyFilter.min,
-                    to:  BrainyFilter.max,
+                    to:  BrainyFilter.higherValue,
                     postfix: "грн",
                     hide_min_max: true,
                     extra_classes: "switch-slider",
                     onChange: function (data) {
+                        BrainyFilter.lowerValue = data['from'];
+                        BrainyFilter.higherValue = data['to'];
                         $(BrainyFilter.minFieldId).val(data['from']);
                         $(BrainyFilter.maxFieldId).val(data['to']);
                         //BrainyFilter.currentSendMethod($(this));
@@ -908,12 +899,11 @@ if (typeof BrainyFilter === 'undefined') {
                 if (vals[0] > vals[1]) {
                     vals[1] = vals[0];
                 }
-
-                $slider.data("ionRangeSlider").update({
-                    min: min,
-                    max: max,
-                    from: min,
-                    to: max
+                $(BrainyFilter.sliderId).data("ionRangeSlider").update({
+                    min:  min,
+                    max:  max,
+                    from: BrainyFilter.lowerValue,
+                    to:   BrainyFilter.higherValue,
                 });
 
                 if (sliderType === 2 || sliderType === 3) {
