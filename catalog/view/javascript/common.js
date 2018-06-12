@@ -357,7 +357,7 @@ var wishlist = {
 
                     //$('#wishlist-total span').html(json['total']);
                     $('#wishlist-total').attr('title', json['total']);
-                    $("span[data-product_id='" + product_id + "']").each(function() {
+                    $("span[data-product_id='" + product_id + "'], a[data-product_id='" + product_id + "']").each(function() {
                         $(this).attr("onclick","wishlist.remove('"+ product_id +"');");
                         $(this).children('i').addClass("active-fa-heart");
                     });
@@ -366,7 +366,7 @@ var wishlist = {
                 //$('html, body').animate({ scrollTop: 0 }, 'slow');
             },
             error: function(xhr, ajaxOptions, thrownError) {
-                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });
     },
@@ -388,7 +388,7 @@ var wishlist = {
                 $('.wishlist_menu').html(json['total']);
             },
             error: function(xhr, ajaxOptions, thrownError) {
-                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });
     }

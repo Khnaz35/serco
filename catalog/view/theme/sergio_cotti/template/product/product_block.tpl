@@ -25,7 +25,7 @@
             </div>
         <?php } ?>
     </div>
-    <a href="#" class="box-img-new-now">
+    <a href="<?php echo $product['href']; ?>" class="box-img-new-now">
         <?php if (!empty($labels)) { ?>
             <?php foreach ($labels as $label) { ?>
                 <span class="ribbons">

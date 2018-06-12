@@ -239,7 +239,11 @@ class ControllerCommonHeader extends Controller {
             'href' => $this->url->link('information/contact')
         );
 
-        $data['breadcrumbs'] = $this->load->controller('common/breadcrumbs');
+        $data['breadcrumbs'] = '';
+
+        if(isset($this->request->get['route']) && !$this->request->get['route'] == 'product/product'){
+            $data['breadcrumbs'] = $this->load->controller('common/breadcrumbs');
+        }
 
         $data['language'] = $this->load->controller('common/language');
         $data['currency'] = $this->load->controller('common/currency');
