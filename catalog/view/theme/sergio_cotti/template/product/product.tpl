@@ -109,7 +109,7 @@
                     <!-- box-product-price end-->
 
                     <!-- product-color-pick -->
-                        <?php  if( isset($product_color) && isset($relative_products_color) ){ ?>
+                        <?php  if(isset($product_color)){ ?>
                             <div class="product-color-pick">
                                 <ul class="product_colors list-unstyled">
                                     <?php  foreach ($product_color as $color) { ?>
@@ -118,6 +118,7 @@
                                                 <img src="image/<?php echo $color['color_image']; ?>" title="<?php echo $color['name']; ?>" alt="<?php echo $color['name']; ?>">
                                             </div>
                                         </li>
+                                        <input type="hidden" name="option[<?php echo $color['product_option_id']; ?>]" value="<?php echo $color['product_option_value_id']; ?>">
                                     <?php } ?>
                                     <?php  foreach ($relative_products_color as $color) { ?>
                                         <li class="product_color_not_selected">
@@ -162,28 +163,6 @@
                                             <?php } ?>
                                             <?php $i++; ?>
                                         <?php } ?>
-                                    </div>
-                                <?php }else{ ?>
-                                    <div class="option-container option-select-container option-container-<?php echo $option['product_option_id']; ?> form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
-                                        <div class="product_option_container">
-                                            <div class="option_title_container">
-                                                <label class="option_title control-label" for="input-option<?php echo $option['product_option_id']; ?>"><?php echo $option['name']; ?></label>
-                                            </div>
-                                            <div class="option_body_container">
-                                                <select name="option[<?php echo $option['product_option_id']; ?>]" id="input-option<?php echo $option['product_option_id']; ?>" class="form-control option-control">
-
-                                                    <?php foreach ($option['product_option_value'] as $option_value) { ?>
-                                                        <option value="<?php echo $option_value['product_option_value_id']; ?>"><?php echo $option_value['name']; ?>
-                                                            <?php if ($option_value['price']) { ?>
-                                                                (<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
-                                                            <?php } ?>
-                                                        </option>
-                                                    <?php } ?>
-                                              </select>
-                                            </div>
-                                            <div class="clearfix">
-                                            </div>
-                                        </div>
                                     </div>
                                 <?php } ?>
                             <?php } ?>

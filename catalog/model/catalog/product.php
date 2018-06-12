@@ -576,10 +576,11 @@ class ModelCatalogProduct extends Model {
         public function getProductColor($product_id) {
 		//$query = $this->db->query("SELECT rd.* FROM " . DB_PREFIX . "product_recurring pr JOIN " . DB_PREFIX . "recurring_description rd ON (rd.language_id = " . (int)$this->config->get('config_language_id') . " AND rd.recurring_id = pr.recurring_id) JOIN " . DB_PREFIX . "recurring r ON r.recurring_id = rd.recurring_id WHERE pr.product_id = " . (int)$product_id . " AND status = '1' AND pr.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' ORDER BY sort_order ASC");
 
-                $query = $this->db->query("SELECT ovd.name, po.product_id,ov.image as color_image,'1' as selected  from " . DB_PREFIX . "product_option po JOIN " . DB_PREFIX . "product_option_value pov ON (po.product_option_id = pov.product_option_id)
-JOIN " . DB_PREFIX . "option_value ov  ON (ov.option_value_id = pov.option_value_id)
-left JOIN " . DB_PREFIX . "option_value_description ovd  ON (ov.option_value_id = ovd.option_value_id)
- where  pov.option_id='13' and po.product_id='" . (int)$product_id . "' ORDER BY ov.sort_order");
+        	$query = $this->db->query("SELECT ovd.name, po.product_id,ov.image as color_image,'1' as selected, pov.option_value_id, pov.product_option_id
+        		from " . DB_PREFIX . "product_option po JOIN " . DB_PREFIX . "product_option_value pov ON (po.product_option_id = pov.product_option_id)
+				JOIN " . DB_PREFIX . "option_value ov  ON (ov.option_value_id = pov.option_value_id)
+				left JOIN " . DB_PREFIX . "option_value_description ovd  ON (ov.option_value_id = ovd.option_value_id)
+ 				where  pov.option_id='13' and po.product_id='" . (int)$product_id . "' ORDER BY ov.sort_order");
 
 		return $query->rows;
 	}

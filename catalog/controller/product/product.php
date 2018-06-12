@@ -566,6 +566,8 @@ class ControllerProductProduct extends Controller {
 
             $relative_colors = $this->model_catalog_product->getRelativeProductsColor($product_id);
 
+            $data['relative_products_color'] = array();
+
             foreach ($relative_colors as $product_color)
             {
                 $data['relative_products_color'][] = array(
