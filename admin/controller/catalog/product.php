@@ -1519,6 +1519,7 @@ class ControllerCatalogProduct extends Controller {
 
 			$filter_data = array(
 				'filter_name'  => $filter_name,
+				'filter_model_or_name'  => $filter_name,
 				'filter_model' => $filter_model,
 				'start'        => 0,
 				'limit'        => $limit
