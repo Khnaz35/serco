@@ -30,7 +30,7 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
-    $( ".header-search" ).click(function() {
+    $( ".header-search" ).click(function(e) {
         $('.search-fixed').addClass('opened');
         e.preventDefault();
     });

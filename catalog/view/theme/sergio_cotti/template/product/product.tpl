@@ -11,7 +11,7 @@
 <?php } ?>
 
 <!-- Content -->
-<div class="content">
+<div id="content" class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-7 ">
@@ -88,7 +88,7 @@
                     <!-- page nav end-->
                 </div>
 
-                <div class="product-actions">
+                <div id="product" class="product-actions">
 
                     <!--  product-features -->
                         <div class="product-features">
@@ -210,6 +210,7 @@
 
                     <?php if ($quantity > 0) { ?>
                         <div class="box-cart-button clearfix d-flex justify-content-center">
+                            <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
                             <input id="input-quantity" type="number" name="quantity" value="<?php echo $minimum; ?>" min="<?php echo $minimum; ?>" max="<?php echo $quantity; ?>" step="1" />
                             <a href="#" id="button-cart" class="addcart"><?php echo $button_cart; ?></a>
                             <a href="#" data-product_id="<?php echo $product_id; ?>" onclick="wishlist.add('<?php echo $product_id; ?>');return false" class="addwish"><i class="fal fa-heart"></i></a>
@@ -359,18 +360,13 @@
 <!-- Content end-->
 
 <script type="text/javascript">
-$('#button-cart').on('click', function() {
+$('#button-cart').on('click', function(e) {
+    e.preventDefault()
     $.ajax({
         url: 'index.php?route=checkout/cart/add',
         type: 'post',
         data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
         dataType: 'json',
-        beforeSend: function() {
-                 $('#button-cart').button('loading');
-                },
-        complete: function() {
-            $('#button-cart').button('reset');
-        },
         success: function(json) {
             $('.alert, .text-danger').remove();
             $('.form-group').removeClass('has-error');
@@ -441,7 +437,8 @@ $('#pills-review').delegate('.pagination a', 'click', function(e) {
 
 $('.comment_container').load('index.php?route=product/product/review&product_id=<?php echo $product_id; ?>');
 
-$('#button-review').on('click', function() {
+$('#button-review').on('click', function(e) {
+    e.preventDefault();
     $.ajax({
         url: 'index.php?route=product/product/write&product_id=<?php echo $product_id; ?>',
         type: 'post',
