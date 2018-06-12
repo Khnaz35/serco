@@ -899,11 +899,17 @@ if (typeof BrainyFilter === 'undefined') {
                 if (vals[0] > vals[1]) {
                     vals[1] = vals[0];
                 }
+
+                var to = BrainyFilter.higherValue;
+
+                if(BrainyFilter.higherValue === 0){
+                    to = max;
+                }
                 $(BrainyFilter.sliderId).data("ionRangeSlider").update({
                     min:  min,
                     max:  max,
                     from: BrainyFilter.lowerValue,
-                    to:   BrainyFilter.higherValue,
+                    to:   to,
                 });
 
                 if (sliderType === 2 || sliderType === 3) {
