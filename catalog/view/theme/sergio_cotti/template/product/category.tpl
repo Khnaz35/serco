@@ -7,9 +7,14 @@
 <!-- Content -->
 <div class="content" id="content">
     <div class="container-fluid">
-        <div class="filtes-box d-lg-none d-md-none">
-            <a class="filters-button" href="#shoppingbag">Фильтры</a>
-        </div>
+        <?php if ($column_left) { ?>
+            <!-- sidebar -->
+            <div class="filtes-box d-lg-none d-md-none">
+                <a class="filters-button" href="#shoppingbag">Фильтры</a>
+            </div>
+            <!-- sidebar end-->
+        <?php } ?>
+
         <div class="title-catalog">
             <h1 class=""><?php echo $heading_title; ?></h1>
         </div>

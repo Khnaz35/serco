@@ -143,6 +143,7 @@ class ControllerProductSearch extends Controller {
 		$data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 		$data['text_sort'] = $this->language->get('text_sort');
 		$data['text_limit'] = $this->language->get('text_limit');
+		$data['text_choose_size'] = $this->language->get('text_choose_size');
 
 		$data['entry_search'] = $this->language->get('entry_search');
 		$data['entry_description'] = $this->language->get('entry_description');
@@ -237,8 +238,11 @@ class ControllerProductSearch extends Controller {
 					$price = false;
 				}
 
+				$special_rate = 0;
+
 				if ((float)$result['special']) {
 					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					$special_rate = '-' . round(($result['price'] - $result['special']) / $result['price'] * 100, 0) . '%';
 				} else {
 					$special = false;
 				}
@@ -255,23 +259,8 @@ class ControllerProductSearch extends Controller {
 					$rating = false;
 				}
 
-				$label = 'label_empty';
-				if ($result['jan'] == 1) {
-				   $label = 'label_latest';
-				}
-				else {
-					if ($result['jan'] == 2) {
-					   $label = 'label_special';
-					}
-					else {
-						if ($result['jan'] == 3) {
-						   $label = 'label_bestseller';
-						}
-					}
-				}
-
 				$current_product_mopt_price = $this->model_catalog_product->getProductMOptPrice($result['product_id']);
-				$current_mopt_price = false; 
+				$current_mopt_price = false;
 				if ($current_product_mopt_price){
 				   if ((float)$current_product_mopt_price) {
 					   $current_mopt_price = $this->currency->format($this->tax->calculate($current_product_mopt_price, $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
@@ -280,6 +269,7 @@ class ControllerProductSearch extends Controller {
 
 				if ((int)$this->config->get('config_customer_group_id') != 1) {
 				   $special = false;
+				   $special_rate = 0;
 
 				   $current_product_rozn_price = $this->model_catalog_product->getProductRoznPrice($result['product_id']);
 					if ($current_product_rozn_price){
@@ -289,9 +279,30 @@ class ControllerProductSearch extends Controller {
 					}
 				}
 
+				$labels = array();
+
+				if ($result['jan'] == 1) {
+					$labels[] = array(
+						'class' => 'newness',
+						'text' => 'New'
+					);
+				}
+				if ($special_rate) {
+				    $labels[] = array(
+						'class' => 'onsale',
+						'text' => $special_rate
+					);
+				}
+				if ($result['jan'] == 3) {
+				    $labels[] = array(
+						'class' => 'featured',
+						'text' => 'hot'
+					);
+				}
+
 				$product_options = array();
 
-			   foreach ($this->model_catalog_product->getProductOptions($result['product_id']) as $option) {
+			    foreach ($this->model_catalog_product->getProductOptions($result['product_id']) as $option) {
 				   $product_option_value_data = array();
 
 				   foreach ($option['product_option_value'] as $option_value) {
@@ -304,7 +315,7 @@ class ControllerProductSearch extends Controller {
 						   );
 					   }
 				   }
-				   if ($option['option_id'] == 14) {
+				   if ($option['option_id'] == 74) {
 					   $product_options[] = array(
 						   'product_option_id'    => $option['product_option_id'],
 						   'product_option_value' => $product_option_value_data,
@@ -318,9 +329,9 @@ class ControllerProductSearch extends Controller {
 			   }
 				$data['products'][] = array(
 					'product_id'  => $result['product_id'],
-					'label' => $label,
+					'labels'      => $labels,
 					'mopt_price'  => $current_mopt_price,
-					'options'  => $product_options,
+					'options'     => $product_options,
 					'thumb'       => $image,
 					'name'        => $result['name'],
 					'description' => utf8_substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, $this->config->get($this->config->get('config_theme') . '_product_description_length')) . '..',
@@ -546,6 +557,8 @@ class ControllerProductSearch extends Controller {
 				$this->model_account_search->addSearch($search_data);
 			}
 		}
+
+		$this->document->setBreadcrumbs($data['breadcrumbs']);
 
 		$data['search'] = $search;
 		$data['description'] = $description;

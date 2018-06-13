@@ -241,7 +241,7 @@ class ControllerCommonHeader extends Controller {
 
         $data['breadcrumbs'] = '';
 
-        if(isset($this->request->get['route']) && !$this->request->get['route'] == 'product/product'){
+        if(isset($this->request->get['route']) && $this->request->get['route'] != 'product/product'){
             $data['breadcrumbs'] = $this->load->controller('common/breadcrumbs');
         }
 
