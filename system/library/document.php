@@ -8,6 +8,7 @@ class Document {
 	private $styles = array();
 	private $scripts = array();
 	private $og_image;
+	private $breadcrumbs = array();
 
 	public function setTitle($title) {
 		$this->title = $title;
@@ -26,8 +27,8 @@ class Document {
 	{
 		return $this->robots;
 	}
-						
-			
+
+
 	public function setDescription($description) {
 		$this->description = $description;
 	}
@@ -85,5 +86,20 @@ class Document {
 
 	public function getOgImage() {
 		return $this->og_image;
+	}
+
+	public function getBreadcrumbs() {
+		return $this->breadcrumbs;
+	}
+
+	public function addBreadcrumb($href, $title) {
+		$this->breadcrumbs[] = array(
+			'text'  => $title,
+			'href' => $href,
+		);
+	}
+
+	public function setBreadcrumbs(array $breadcrumbs) {
+		$this->breadcrumbs = $breadcrumbs;
 	}
 }

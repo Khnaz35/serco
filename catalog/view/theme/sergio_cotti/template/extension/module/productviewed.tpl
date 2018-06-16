@@ -5,7 +5,9 @@
         <div class="swiper-container swiper-container-js swiper-container-horizontal swiper-initiated">
             <div class="swiper-wrapper">
                 <?php foreach ($products as $product) { ?>
-                    <?php include('catalog/view/theme/'.$config_theme.'/template/product/product_block.tpl'); ?>
+                    <div class="swiper-slide">
+                        <?php include('catalog/view/theme/'.$config_theme.'/template/product/product_block.tpl'); ?>
+                    </div>
                 <?php } ?>
             </div>
             <!-- If we need navigation buttons-->
@@ -15,34 +17,42 @@
     </div>
     <!-- Slider you wathing end-->
     <script>
-            var swiper = new Swiper('#slider-you-watching<?php echo $module_productviewed_number; ?> > .swiper-container', {
-                slidesPerView: 5,
-                spaceBetween: 30,
-                autoplay: {
-                        delay: 5000,
-                    },
-                // Navigation arrows
-                        navigation: {
-                            nextEl: '#prev<?php echo $module_productviewed_number; ?>',
-                            prevEl: '#next<?php echo $module_productviewed_number; ?>',
-                        },
-                        breakpoints: {
-                            // when window width is <= 320px
-                            320: {
-                                slidesPerView: 1,
-                                spaceBetween: 10
-                            },
-                            // when window width is <= 480px
-                            480: {
-                                slidesPerView: 1,
-                                spaceBetween: 20
-                            },
-                            // when window width is <= 640px
-                            768: {
-                                slidesPerView: 2,
-                                spaceBetween: 30
-                            }
-                        },
-            });
+        var swiper = new Swiper('#slider-you-watching<?php echo $module_productviewed_number; ?> > .swiper-container', {
+            slidesPerView: 5,
+            spaceBetween: 30,
+            autoplay: {
+                    delay: 5000,
+                },
+            // Navigation arrows
+            navigation: {
+                nextEl: '#prev<?php echo $module_productviewed_number; ?>',
+                prevEl: '#next<?php echo $module_productviewed_number; ?>',
+            },
+            breakpoints: {
+                // when window width is <= 320px
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 10
+                },
+                // when window width is <= 480px
+                480: {
+                    slidesPerView: 1,
+                    spaceBetween: 20
+                },
+                // when window width is <= 640px
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 30
+                },
+                992: {
+                    slidesPerView: 3,
+                    spaceBetween: 20
+                },
+                1100: {
+                    slidesPerView: 4,
+                    spaceBetween: 20
+                }
+            },
+        });
     </script>
 <?php } ?>

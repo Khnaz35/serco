@@ -53,12 +53,13 @@
     <script src="catalog/view/theme/sergio_cotti/assets/js/bootstrap.min.js"></script>
     <script src="catalog/view/theme/sergio_cotti/assets/js/jquery.matchHeight-min.js"></script>
     <script src="catalog/view/theme/sergio_cotti/assets/js/jquery.mmenu.all.js"></script>
-    <script src="catalog/view/javascript/common.js" type="text/javascript"></script>
 
 
     <?php foreach ($scripts as $script) { ?>
         <script src="<?php echo $script; ?>" type="text/javascript"></script>
     <?php } ?>
+
+    <script src="catalog/view/javascript/common.js" type="text/javascript"></script>
 
     <?php foreach ($analytics as $analytic) { ?>
         <?php echo $analytic; ?>
@@ -69,7 +70,7 @@
     <!-- Wrapper for mobile menu -->
     <div id="wrapper">
         <!--  Mobile menu -->
-        <nav id="menu">
+        <nav id="menu" class="d-none">
             <ul>
                 <li>
                     <input type="text" class="mobile-menu-search" name="m_search" placeholder="Поиск">
@@ -219,3 +220,4 @@
             </div>
         </div>
         <!-- Header end-->
+        <?php echo $breadcrumbs; ?>
