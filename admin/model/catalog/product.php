@@ -367,12 +367,17 @@ class ModelCatalogProduct extends Model {
 			$sql .= " WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
 
 
-		if (!empty($data['filter_name'])) {
-			$sql .= " AND pd.name LIKE '" . $this->db->escape($data['filter_name']) . "%'";
-		}
+		if (!empty($data['filter_model_or_name'])) {
+			$sql .= " AND ( pd.name LIKE '" . $this->db->escape($data['filter_model_or_name']) . "%' ";
+			$sql .= "	OR p.model LIKE '" . $this->db->escape($data['filter_model_or_name']) . "%' )";
+		} else {
+			if (!empty($data['filter_name'])) {
+				$sql .= " AND pd.name LIKE '" . $this->db->escape($data['filter_name']) . "%'";
+			}
 
-		if (!empty($data['filter_model'])) {
-			$sql .= " AND p.model LIKE '" . $this->db->escape($data['filter_model']) . "%'";
+			if (!empty($data['filter_model'])) {
+				$sql .= " AND p.model LIKE '" . $this->db->escape($data['filter_model']) . "%'";
+			}
 		}
 
 		if (isset($data['filter_price']) && !is_null($data['filter_price'])) {

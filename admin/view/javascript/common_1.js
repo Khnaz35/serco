@@ -31,12 +31,12 @@ $(document).ready(function() {
 	// Highlight any found errors
 	$('.text-danger').each(function() {
 		var element = $(this).parent().parent();
-
+		
 		if (element.hasClass('form-group')) {
 			element.addClass('has-error');
 		}
 	});
-
+	
 	// Set last page opened on the menu
 	$('#menu a[href]').on('click', function() {
 		sessionStorage.setItem('menu', $(this).attr('href'));
@@ -51,15 +51,15 @@ $(document).ready(function() {
 
 	if (localStorage.getItem('column-left') == 'active') {
 		$('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
-
+		
 		$('#column-left').addClass('active');
-
+		
 		// Slide Down Menu
 		$('#menu li.active').has('ul').children('ul').addClass('collapse in');
 		$('#menu li').not('.active').has('ul').children('ul').addClass('collapse');
 	} else {
 		$('#button-menu i').replaceWith('<i class="fa fa-indent fa-lg"></i>');
-
+		
 		$('#menu li li.active').has('ul').children('ul').addClass('collapse in');
 		$('#menu li li').not('.active').has('ul').children('ul').addClass('collapse');
 	}
@@ -80,7 +80,7 @@ $(document).ready(function() {
 			localStorage.setItem('column-left', 'active');
 
 			$('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
-
+			
 			$('#column-left').addClass('active');
 
 			// Add the slide down to open menu items
@@ -99,28 +99,41 @@ $(document).ready(function() {
 			$(this).parent('li').siblings().removeClass('open').children('ul.in').collapse('hide');
 		}
 	});
-
-	// Tooltip remove fixed
-	$(document).on('click', '[data-toggle=\'tooltip\']', function(e) {
-		$('body > .tooltip').remove();
+	
+	// Override summernotes image manager
+	$('button[data-event=\'showImageDialog\']').attr('data-toggle', 'image').removeAttr('data-event');
+	
+	$(document).delegate('button[data-toggle=\'image\']', 'click', function() {
+		$('#modal-image').remove();
+		
+		$(this).parents('.note-editor').find('.note-editable').focus();
+				
+		$.ajax({
+			url: 'index.php?route=common/filemanager&token=' + getURLVar('token'),
+			dataType: 'html',
+			beforeSend: function() {
+				$('#button-image i').replaceWith('<i class="fa fa-circle-o-notch fa-spin"></i>');
+				$('#button-image').prop('disabled', true);
+			},
+			complete: function() {
+				$('#button-image i').replaceWith('<i class="fa fa-upload"></i>');
+				$('#button-image').prop('disabled', false);
+			},
+			success: function(html) {
+				$('body').append('<div id="modal-image" class="modal">' + html + '</div>');
+	
+				$('#modal-image').modal('show');
+			}
+		});	
 	});
 
 	// Image Manager
-	$(document).on('click', 'a[data-toggle=\'image\']', function(e) {
-		var $element = $(this);
-		var $popover = $element.data('bs.popover'); // element has bs popover?
-		
+	$(document).delegate('a[data-toggle=\'image\']', 'click', function(e) {
 		e.preventDefault();
-
-		// destroy all image popovers
-		$('a[data-toggle="image"]').popover('destroy');
-
-		// remove flickering (do not re-add popover when clicking for removal)
-		if ($popover) {
-			return;
-		}
-
-		$element.popover({
+	
+		var element = this;
+	
+		$(element).popover({
 			html: true,
 			placement: 'right',
 			trigger: 'manual',
@@ -128,99 +141,94 @@ $(document).ready(function() {
 				return '<button type="button" id="button-image" class="btn btn-primary"><i class="fa fa-pencil"></i></button> <button type="button" id="button-clear" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>';
 			}
 		});
-
-		$element.popover('show');
+		
+		$(element).popover('toggle');		
+		
+		var imageManagerUrl;
 
 		$('#button-image').on('click', function() {
-			var $button = $(this);
-			var $icon   = $button.find('> i');
-			
 			$('#modal-image').remove();
 
+			if(!localStorage.getItem('lastFolder')) {
+
+				imageManagerUrl = 'index.php?route=common/filemanager&token=' + getURLVar('token') + '&target=' + $(element).parent().find('input').attr('id') + '&thumb=' + $(element).attr('id') + '&directory=' + $('#last-folder').val();
+
+			} else {
+
+				var url = localStorage.getItem('lastFolder');
+				var url_splitted =  url.split('&');
+				var directory = url_splitted[2];
+				imageManagerUrl = 'index.php?route=common/filemanager&token=' + getURLVar('token') + '&target=' + $(element).parent().find('input').attr('id') + '&thumb=' + $(element).attr('id') + '&' + directory;
+
+			}
+
+			$('#modal-image').load($(this).attr('href'));  
+			
+
 			$.ajax({
-				url: 'index.php?route=common/filemanager&token=' + getURLVar('token') + '&target=' + $element.parent().find('input').attr('id') + '&thumb=' + $element.attr('id'),
+				url: imageManagerUrl,
 				dataType: 'html',
 				beforeSend: function() {
-					$button.prop('disabled', true);
-					if ($icon.length) {
-						$icon.attr('class', 'fa fa-circle-o-notch fa-spin');
-					}
+					$('#button-image i').replaceWith('<i class="fa fa-circle-o-notch fa-spin"></i>');
+					$('#button-image').prop('disabled', true);
 				},
 				complete: function() {
-					$button.prop('disabled', false);
-					if ($icon.length) {
-						$icon.attr('class', 'fa fa-pencil');
-					}
+					$('#button-image i').replaceWith('<i class="fa fa-upload"></i>');
+					$('#button-image').prop('disabled', false);
 				},
 				success: function(html) {
 					$('body').append('<div id="modal-image" class="modal">' + html + '</div>');
-
+	
 					$('#modal-image').modal('show');
 				}
 			});
-
-			$element.popover('destroy');
+	
+			$(element).popover('hide');
 		});
-
+	
 		$('#button-clear').on('click', function() {
-			$element.find('img').attr('src', $element.find('img').attr('data-placeholder'));
-
-			$element.parent().find('input').val('');
-
-			$element.popover('destroy');
+			$(element).find('img').attr('src', $(element).find('img').attr('data-placeholder'));
+			
+			$(element).parent().find('input').attr('value', '');
+	
+			$(element).popover('hide');
 		});
 	});
-
+	
 	// tooltips on hover
 	$('[data-toggle=\'tooltip\']').tooltip({container: 'body', html: true});
 
 	// Makes tooltips work on ajax generated content
 	$(document).ajaxStop(function() {
 		$('[data-toggle=\'tooltip\']').tooltip({container: 'body'});
-	});
-
-	// https://github.com/opencart/opencart/issues/2595
-	$.event.special.remove = {
-		remove: function(o) {
-			if (o.handler) {
-				o.handler.apply(this, arguments);
-			}
-		}
-	}
-
-	$('[data-toggle=\'tooltip\']').on('remove', function() {
-		$(this).tooltip('destroy');
-	});
+	});	
 });
 
 // Autocomplete */
 (function($) {
 	$.fn.autocomplete = function(option) {
 		return this.each(function() {
-			var $this = $(this);
-			var $dropdown = $('<ul class="dropdown-menu" />');
-			
 			this.timer = null;
-			this.items = [];
-
+			this.items = new Array();
+	
 			$.extend(this, option);
-
-			$this.attr('autocomplete', 'off');
-
+	
+			$(this).attr('autocomplete', 'off');
+			
 			// Focus
-			$this.on('focus', function() {
+			$(this).on('focus', function() {
 				this.request();
 			});
-
+			
 			// Blur
-			$this.on('blur', function() {
+			$(this).on('blur', function() {
 				setTimeout(function(object) {
 					object.hide();
-				}, 200, this);
+				}, 200, this);				
 			});
-
+			
 			// Keydown
-			$this.on('keydown', function(event) {
+			$(this).on('keydown', function(event) {
 				switch(event.keyCode) {
 					case 27: // escape
 						this.hide();
@@ -228,92 +236,97 @@ $(document).ready(function() {
 					default:
 						this.request();
 						break;
-				}
+				}				
 			});
-
+			
 			// Click
 			this.click = function(event) {
 				event.preventDefault();
-
-				var value = $(event.target).parent().attr('data-value');
-
+	
+				value = $(event.target).parent().attr('data-value');
+	
 				if (value && this.items[value]) {
 					this.select(this.items[value]);
 				}
 			}
-
+			
 			// Show
 			this.show = function() {
-				var pos = $this.position();
-
-				$dropdown.css({
-					top: pos.top + $this.outerHeight(),
+				var pos = $(this).position();
+	
+				$(this).siblings('ul.dropdown-menu').css({
+					top: pos.top + $(this).outerHeight(),
 					left: pos.left
 				});
-
-				$dropdown.show();
+	
+				$(this).siblings('ul.dropdown-menu').show();
 			}
-
+			
 			// Hide
 			this.hide = function() {
-				$dropdown.hide();
-			}
-
+				$(this).siblings('ul.dropdown-menu').hide();
+			}		
+			
 			// Request
 			this.request = function() {
 				clearTimeout(this.timer);
-
+		
 				this.timer = setTimeout(function(object) {
 					object.source($(object).val(), $.proxy(object.response, object));
 				}, 200, this);
 			}
-
+			
 			// Response
 			this.response = function(json) {
-				var html = '';
-				var category = {};
-				var name;
-				var i = 0, j = 0;
-
+				html = '';
+	
 				if (json.length) {
 					for (i = 0; i < json.length; i++) {
-						// update element items
 						this.items[json[i]['value']] = json[i];
-
+					}
+	
+					for (i = 0; i < json.length; i++) {
 						if (!json[i]['category']) {
-							// ungrouped items
 							html += '<li data-value="' + json[i]['value'] + '"><a href="#">' + json[i]['label'] + '</a></li>';
-						} else {
-							// grouped items
-							name = json[i]['category'];
-							if (!category[name]) {
-								category[name] = [];
-							}
-
-							category[name].push(json[i]);
 						}
 					}
-
-					for (name in category) {
-						html += '<li class="dropdown-header">' + name + '</li>';
-
-						for (j = 0; j < category[name].length; j++) {
-							html += '<li data-value="' + category[name][j]['value'] + '"><a href="#">&nbsp;&nbsp;&nbsp;' + category[name][j]['label'] + '</a></li>';
+	
+					// Get all the ones with a categories
+					var category = new Array();
+	
+					for (i = 0; i < json.length; i++) {
+						if (json[i]['category']) {
+							if (!category[json[i]['category']]) {
+								category[json[i]['category']] = new Array();
+								category[json[i]['category']]['name'] = json[i]['category'];
+								category[json[i]['category']]['item'] = new Array();
+							}
+	
+							category[json[i]['category']]['item'].push(json[i]);
+						}
+					}
+	
+					for (i in category) {
+						html += '<li class="dropdown-header">' + category[i]['name'] + '</li>';
+	
+						for (j = 0; j < category[i]['item'].length; j++) {
+							html += '<li data-value="' + category[i]['item'][j]['value'] + '"><a href="#">&nbsp;&nbsp;&nbsp;' + category[i]['item'][j]['label'] + '</a></li>';
 						}
 					}
 				}
-
+	
 				if (html) {
 					this.show();
 				} else {
 					this.hide();
 				}
-
-				$dropdown.html(html);
+	
+				$(this).siblings('ul.dropdown-menu').html(html);
 			}
-
-			$dropdown.on('click', '> li > a', $.proxy(this.click, this));
-			$this.after($dropdown);
+			
+			$(this).after('<ul class="dropdown-menu"></ul>');
+			$(this).siblings('ul.dropdown-menu').delegate('a', 'click', $.proxy(this.click, this));	
+			
 		});
 	}
 })(window.jQuery);
