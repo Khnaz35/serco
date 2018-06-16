@@ -81,7 +81,7 @@ class ControllerProductCategory extends Controller {
 				if ($category_info) {
 					$data['breadcrumbs'][] = array(
 						'text' => $category_info['name'],
-						'href' => $this->url->link('product/category', 'path=' . $path . $url)
+						'href' => $this->url->link('product/category', 'path=' . $path_id . $url)
 					);
 				}
 			}
@@ -133,7 +133,8 @@ class ControllerProductCategory extends Controller {
 			$data['text_known'] = $this->language->get('text_known');
 			$data['text_known_opt'] = $this->language->get('text_known_opt');
 			$data['text_more'] = $this->language->get('text_more');
-//end             
+			$data['text_choose_size'] = $this->language->get('text_choose_size');
+//end
 			$data['button_wishlist'] = $this->language->get('button_wishlist');
 			$data['button_compare'] = $this->language->get('button_compare');
 			$data['button_continue'] = $this->language->get('button_continue');
@@ -143,7 +144,7 @@ class ControllerProductCategory extends Controller {
 			// Set the last category breadcrumb
 			$data['breadcrumbs'][] = array(
 				'text' => $category_info['name'],
-				'href' => $this->url->link('product/category', 'path=' . $this->request->get['path'])
+				'href' => $this->url->link('product/category', 'path=' . $category_id)
 			);
 
 			if ($category_info['image']) {
@@ -185,7 +186,7 @@ class ControllerProductCategory extends Controller {
 				} else {
 					$thumb = $this->model_tool_image->resize('placeholder.png', 200, 200);
 				}
-                
+
 				$data['categories'][] = array(
 					'name' => $result['name'],
 					'thumb' => $thumb,
@@ -221,8 +222,11 @@ class ControllerProductCategory extends Controller {
 					$price = false;
 				}
 
+           		$special_rate = 0;
+
 				if ((float)$result['special']) {
 					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					$special_rate = '-' . round(($result['price'] - $result['special']) / $result['price'] * 100, 0) . '%';
 				} else {
 					$special = false;
 				}
@@ -240,22 +244,29 @@ class ControllerProductCategory extends Controller {
 				}
 
 //start
-			$label = 'label_empty';
+			$labels = array();
+
 			if ($result['jan'] == 1) {
-			   $label = 'label_latest';
-			} else {
-				if ($result['jan'] == 2) {
-				   $label = 'label_special';
-				}
-				else {
-					if ($result['jan'] == 3) {
-					   $label = 'label_bestseller';
-					}
-				}
+				$labels[] = array(
+					'class' => 'newness',
+					'text' => 'New'
+				);
+			}
+			if ($special_rate) {
+			    $labels[] = array(
+					'class' => 'onsale',
+					'text' => $special_rate
+				);
+			}
+			if ($result['jan'] == 3) {
+			    $labels[] = array(
+					'class' => 'featured',
+					'text' => 'hot'
+				);
 			}
 
 			$current_product_mopt_price = $this->model_catalog_product->getProductMOptPrice($result['product_id']);
-			$current_mopt_price = false; 
+			$current_mopt_price = false;
 			if ($current_product_mopt_price){
 			   if ((float)$current_product_mopt_price) {
 				   $current_mopt_price = $this->currency->format($this->tax->calculate($current_product_mopt_price, $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
@@ -288,7 +299,7 @@ class ControllerProductCategory extends Controller {
 						);
                     }
 				}
-                if ($option['option_id'] == 14) {
+                if ($option['option_id'] == 74) {
     				$product_options[] = array(
     					'product_option_id'    => $option['product_option_id'],
     					'product_option_value' => $product_option_value_data,
@@ -300,14 +311,14 @@ class ControllerProductCategory extends Controller {
     				);
                 }
 			}
-//end             
+//end
 				$data['products'][] = array(
 					'product_id'  => $result['product_id'],
-//start
-             'label' => $label,
-             'mopt_price'  => $current_mopt_price,
-             'options'  => $product_options,
-//end             
+					//start
+					'labels'      => $labels,
+					'mopt_price'  => $current_mopt_price,
+					'options'     => $product_options,
+					//end
 					'thumb'       => $image,
 					'name'        => $result['name'],
 					'description' => utf8_substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, $this->config->get($this->config->get('config_theme') . '_product_description_length')) . '..',
@@ -436,6 +447,8 @@ class ControllerProductCategory extends Controller {
 			    $this->document->addLink($this->url->link('product/category', 'path=' . $category_info['category_id'] . '&page='. ($page + 1), true), 'next');
 			}
 
+			$this->document->setBreadcrumbs($data['breadcrumbs']);
+
 			$data['sort'] = $sort;
 			$data['order'] = $order;
 			$data['limit'] = $limit;
@@ -449,8 +462,8 @@ class ControllerProductCategory extends Controller {
 			$data['footer'] = $this->load->controller('common/footer');
 			$data['header'] = $this->load->controller('common/header');
                          $data['galery_diplom'] = $this->load->controller('information/galery_diplom');
-                         
-                         
+
+
 			$this->response->setOutput($this->load->view('product/category', $data));
 		} else {
 			$url = '';
@@ -494,6 +507,8 @@ class ControllerProductCategory extends Controller {
 
 			$data['continue'] = $this->url->link('common/home');
 
+			$this->document->setBreadcrumbs($data['breadcrumbs']);
+
 			$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . ' 404 Not Found');
 
 			$data['column_left'] = $this->load->controller('common/column_left');
@@ -502,8 +517,8 @@ class ControllerProductCategory extends Controller {
 			$data['content_bottom'] = $this->load->controller('common/content_bottom');
 			$data['footer'] = $this->load->controller('common/footer');
 			$data['header'] = $this->load->controller('common/header');
-                       
-                        
+
+
 
 			$this->response->setOutput($this->load->view('error/not_found', $data));
 		}

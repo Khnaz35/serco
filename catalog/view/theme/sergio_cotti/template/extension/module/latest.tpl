@@ -5,14 +5,15 @@
         <div class="swiper-container swiper-container-js swiper-container-horizontal swiper-initiated">
             <div class="swiper-wrapper">
                 <?php foreach ($products as $product) { ?>
-                    <?php include('catalog/view/theme/'.$config_theme.'/template/product/product_block.tpl'); ?>
+                    <div class="swiper-slide">
+                        <?php include('catalog/view/theme/'.$config_theme.'/template/product/product_block.tpl'); ?>
+                    </div>
                 <?php } ?>
             </div>
-            </div>
-            <!-- If we need navigation buttons-->
-            <div id="prev<?php echo $module_productlatest_number; ?>" class="swiper-button-prev swiper-button-disabled"><i class="fal fa-arrow-left"></i></div>
-            <div id="next<?php echo $module_productlatest_number; ?>" class="swiper-button-next"><i class="fal fa-arrow-right"></i></div>
         </div>
+        <!-- If we need navigation buttons-->
+        <div id="prev<?php echo $module_productlatest_number; ?>" class="swiper-button-prev swiper-button-disabled"><i class="fal fa-arrow-left"></i></div>
+        <div id="next<?php echo $module_productlatest_number; ?>" class="swiper-button-next"><i class="fal fa-arrow-right"></i></div>
     </div>
     <!-- Slider New item end-->
     <script>
@@ -40,6 +41,14 @@
                 768: {
                     slidesPerView: 2,
                     spaceBetween: 30
+                },
+                992: {
+                    slidesPerView: 3,
+                    spaceBetween: 20
+                },
+                1100: {
+                    slidesPerView: 4,
+                    spaceBetween: 20
                 }
             },
         });

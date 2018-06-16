@@ -69,10 +69,11 @@ class ControllerStartupSeoPro extends Controller {
 						} else {
 							$this->request->get['path'] .= '_' . $url[1];
 						}
+						$last_cat_id = $url[1];
 					} elseif (count($url) > 1) {
 						$this->request->get[$url[0]] = $url[1];
 					}
-                    
+
 					if ($url[0] == 'newsblog_category_id') {
 						if (!isset($this->request->get['newsblog_path'])) {
 							$this->request->get['newsblog_path'] = $url[1];
@@ -95,6 +96,9 @@ class ControllerStartupSeoPro extends Controller {
 				}
 			} elseif (isset($this->request->get['path'])) {
 				$this->request->get['route'] = 'product/category';
+
+				$path = $this->getPathByCategory($last_cat_id);
+				if ($path) $this->request->get['path'] = $path;
             } elseif (isset($this->request->get['newsblog_article_id'])) {
                 $this->request->get['route'] = 'newsblog/article';
 				if (!isset($this->request->get['newsblog_path'])) {
@@ -274,12 +278,20 @@ class ControllerStartupSeoPro extends Controller {
 
 		if(count($rows) == count($queries)) {
 			$aliases = array();
-			foreach($rows as $row) {
+			if($route === 'product/category'){
+				$row = array_pop($rows);
 				$aliases[$row['query']] = $row['keyword'];
-			}
-			foreach($queries as $query) {
+				$query = array_pop($queries);
 				$seo_url .= '/' . rawurlencode($aliases[$query]);
+			}else{
+				foreach($rows as $row) {
+					$aliases[$row['query']] = $row['keyword'];
+				}
+				foreach($queries as $query) {
+					$seo_url .= '/' . rawurlencode($aliases[$query]);
+				}
 			}
+
 		}
 
 		if ($seo_url == '') return $link;
@@ -330,7 +342,7 @@ class ControllerStartupSeoPro extends Controller {
 
 		return $path[$article_id];
 	}
-    
+
 	private function getPathByArticleCategory($category_id) {
 		$category_id = (int)$category_id;
 		if ($category_id < 1) return false;

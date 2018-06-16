@@ -7,7 +7,7 @@ class ControllerCheckoutCart extends Controller {
 		$this->address['country_id'] = (($this->config->get('config_country_id'))? $this->config->get('config_country_id'): 0);
 		$this->address['zone_id'] = (($this->config->get('config_zone_id'))? $this->config->get('config_zone_id'): 0);
 	}
-	 public function index() {
+	public function index() {
 		$this->load->language('checkout/cart');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -23,8 +23,6 @@ class ControllerCheckoutCart extends Controller {
 			'href' => $this->url->link('checkout/cart'),
 			'text' => $this->language->get('heading_title')
 		);
-		
-
 
 		$this->document->addStyle('catalog/view/javascript/slick/slick-theme.css');
 		$this->document->addStyle('catalog/view/javascript/slick/slick.css');
@@ -39,7 +37,7 @@ class ControllerCheckoutCart extends Controller {
 			$data['text_next_choice'] = $this->language->get('text_next_choice');
 			$data['text_select_shipping_method'] = $this->language->get('text_select_shipping_method');
 			$data['text_shipping_methods'] = $this->language->get('text_shipping_methods');
-			
+
 			$data['text_comment'] = $this->language->get('text_comment');
 			$data['text_your_order'] = $this->language->get('text_your_order');
 			$data['order_description'] = $this->language->get('order_description');
@@ -62,9 +60,9 @@ class ControllerCheckoutCart extends Controller {
 			$data['checked_np_department'] = 0;
 			$data['checked_shipping_method'] = 0;
 			$this->addNP($data);
-			
 
-			
+
+
 			if (!$this->cart->hasStock() && (!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning'))) {
 				$data['error_warning'] = $this->language->get('error_stock');
 			} elseif (isset($this->session->data['error'])) {
@@ -96,8 +94,8 @@ class ControllerCheckoutCart extends Controller {
 			} else {
 				$data['weight'] = '';
 			}
-			$data['products'] = $this->getProducts(); 
-		
+			$data['products'] = $this->getProducts();
+
 			// Gift Voucher
 			$data['vouchers'] = array();
 
@@ -112,8 +110,8 @@ class ControllerCheckoutCart extends Controller {
 				}
 			}
 			$data['shipping_methods'] = $this->getShippingMethods($this->address);
-			
-			
+
+
 			$data['locations'] = array();
 
 			$this->load->model('localisation/location');
@@ -141,23 +139,23 @@ class ControllerCheckoutCart extends Controller {
 					);
 				}
 			}
-			
-			
-			
+
+
+
 			// Totals
 			$this->load->model('extension/extension');
 
 			$totals = array();
 			$taxes = $this->cart->getTaxes();
 			$total = 0;
-			
-			// Because __call can not keep var references so we put them into an array. 			
+
+			// Because __call can not keep var references so we put them into an array.
 			$total_data = array(
 				'totals' => &$totals,
 				'taxes'  => &$taxes,
 				'total'  => &$total
 			);
-			
+
 			// Display prices
 			if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
 				$sort_order = array();
@@ -173,7 +171,7 @@ class ControllerCheckoutCart extends Controller {
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {
 						$this->load->model('extension/total/' . $result['code']);
-						
+
 						// We have to put the totals in an array so that they pass by reference.
 						$this->{'model_extension_total_' . $result['code']}->getTotal($total_data);
 					}
@@ -187,7 +185,7 @@ class ControllerCheckoutCart extends Controller {
 
 				array_multisort($sort_order, SORT_ASC, $totals);
 			}
-			
+
 			$data['totals'] = array();
 
 			foreach ($totals as $total) {
@@ -204,13 +202,13 @@ class ControllerCheckoutCart extends Controller {
 			$this->load->model('extension/extension');
 
 			$data['modules'] = array();
-			
+
 			$files = glob(DIR_APPLICATION . '/controller/extension/total/*.php');
 
 			if ($files) {
 				foreach ($files as $file) {
 					$result = $this->load->controller('extension/total/' . basename($file, '.php'));
-					
+
 					if ($result) {
 						$data['modules'][] = $result;
 					}
@@ -254,7 +252,7 @@ class ControllerCheckoutCart extends Controller {
 
 	protected function getProducts()
 	{
-		
+
 		$this->load->model('tool/image');
 		$this->load->model('tool/upload');
 
@@ -353,7 +351,7 @@ class ControllerCheckoutCart extends Controller {
 	}
 	protected function getShippingMethodName($address, $code)
 	{
-		
+
 		$result = '';
 		$code_parts = explode('.', $code);
 		$this->load->model('extension/shipping/' . $code_parts[0]);
@@ -378,8 +376,8 @@ class ControllerCheckoutCart extends Controller {
 
 		$results = $this->model_extension_extension->getExtensions('shipping');
 
-		
-		
+
+
 		foreach ($results as $result) {
 			if ($result['code'] && $this->config->get($result['code'] . '_status')) {
 				$this->load->model('extension/shipping/' . $result['code']);
@@ -480,8 +478,8 @@ class ControllerCheckoutCart extends Controller {
 				$totals = array();
 				$taxes = $this->cart->getTaxes();
 				$total = 0;
-		
-				// Because __call can not keep var references so we put them into an array. 			
+
+				// Because __call can not keep var references so we put them into an array.
 				$total_data = array(
 					'totals' => &$totals,
 					'taxes'  => &$taxes,
@@ -519,6 +517,7 @@ class ControllerCheckoutCart extends Controller {
 				}
 
 				$json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));
+				$json['total_items'] = $this->cart->countProducts();
 			} else {
 				$json['redirect'] = str_replace('&amp;', '&', $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']));
 			}
@@ -580,7 +579,7 @@ class ControllerCheckoutCart extends Controller {
 			$taxes = $this->cart->getTaxes();
 			$total = 0;
 
-			// Because __call can not keep var references so we put them into an array. 			
+			// Because __call can not keep var references so we put them into an array.
 			$total_data = array(
 				'totals' => &$totals,
 				'taxes'  => &$taxes,
@@ -618,6 +617,7 @@ class ControllerCheckoutCart extends Controller {
 			}
 
 			$json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));
+			$json['total_items'] = $this->cart->countProducts();
 		}
 
 		$this->response->addHeader('Content-Type: application/json');
@@ -628,80 +628,77 @@ class ControllerCheckoutCart extends Controller {
 		$this->document->addStyle('catalog/view/javascript/slick/slick.css');
 		$this->document->addScript('catalog/view/javascript/slick/slick.min.js');
         $oid = 0;
-        
+
         $user_id = 0;
-        
+
         $this->load->model('checkout/order');
-        
+
         $cid = $user_id;
         $data = array();
 
         $json = array('success' => true);
-        			// Totals
-			$this->load->model('extension/extension');
+    			// Totals
+		$this->load->model('extension/extension');
 
-			$totals = array();
-			$taxes = $this->cart->getTaxes();
-			$total = 0;
-			
-			// Because __call can not keep var references so we put them into an array. 			
-			$total_data = array(
-				'totals' => &$totals,
-				'taxes'  => &$taxes,
-				'total'  => &$total
-			);
+		$totals = array();
+		$taxes = $this->cart->getTaxes();
+		$total = 0;
 
-			// Display prices
-			if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
-				$sort_order = array();
+		// Because __call can not keep var references so we put them into an array.
+		$total_data = array(
+			'totals' => &$totals,
+			'taxes'  => &$taxes,
+			'total'  => &$total
+		);
 
-				$results = $this->model_extension_extension->getExtensions('total');
+		// Display prices
+		if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+			$sort_order = array();
 
-				foreach ($results as $key => $value) {
-					$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-				}
+			$results = $this->model_extension_extension->getExtensions('total');
 
-				array_multisort($sort_order, SORT_ASC, $results);
-
-				foreach ($results as $result) {
-					if ($this->config->get($result['code'] . '_status')) {
-						$this->load->model('extension/total/' . $result['code']);
-						
-						// We have to put the totals in an array so that they pass by reference.
-						$this->{'model_extension_total_' . $result['code']}->getTotal($total_data);
-					}
-				}
-
-				$sort_order = array();
-
-				foreach ($totals as $key => $value) {
-					$sort_order[$key] = $value['sort_order'];
-				}
-
-				array_multisort($sort_order, SORT_ASC, $totals);
+			foreach ($results as $key => $value) {
+				$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
 			}
 
-			$data['totals'] = $total_data['totals'];
-			$data['total'] = $total_data['total'];
-			$data['taxes'] = $total_data['taxes'];
+			array_multisort($sort_order, SORT_ASC, $results);
 
+			foreach ($results as $result) {
+				if ($this->config->get($result['code'] . '_status')) {
+					$this->load->model('extension/total/' . $result['code']);
 
-    
+					// We have to put the totals in an array so that they pass by reference.
+					$this->{'model_extension_total_' . $result['code']}->getTotal($total_data);
+				}
+			}
+
+			$sort_order = array();
+
+			foreach ($totals as $key => $value) {
+				$sort_order[$key] = $value['sort_order'];
+			}
+
+			array_multisort($sort_order, SORT_ASC, $totals);
+		}
+
+		$data['totals'] = $total_data['totals'];
+		$data['total'] = $total_data['total'];
+		$data['taxes'] = $total_data['taxes'];
+
         $this->language->load('checkout/checkout');
-        
-        
+
         $data['invoice_prefix'] = $this->config->get('config_invoice_prefix');
         $data['store_id'] = $this->config->get('config_store_id');
         $data['store_name'] = $this->config->get('config_name');
-        
+
         if ($data['store_id']) {
-            $data['store_url'] = $this->config->get('config_url');        
+            $data['store_url'] = $this->config->get('config_url');
         } else {
-            $data['store_url'] = HTTP_SERVER;    
+            $data['store_url'] = HTTP_SERVER;
         }
-		
+
         $city = ((!empty($this->request->post['city_name']))? $this->request->post['city_name']: '---');
-		
+
         $data['customer_id'] = (($this->customer->isLogged())? $this->customer->getId(): 0);
         $data['customer_group_id'] = (($this->customer->isLogged())? $this->customer->getGroupId(): $this->config->get('config_customer_group_id'));
         $data['firstname'] = $_POST['name'];
@@ -710,28 +707,27 @@ class ControllerCheckoutCart extends Controller {
         $data['telephone'] = $_POST['phone'];
         $data['fax'] = '';
         $data['custom_field'] = '';
-        
+
         $data['payment_firstname'] = $this->request->post['name'];
         $data['payment_lastname'] = '---';
-        $data['payment_company'] = '';    
-        $data['payment_company_id'] = '';    
-        $data['payment_tax_id'] = '';    
-        $data['payment_address_1'] = '---'; 
+        $data['payment_company'] = '';
+        $data['payment_company_id'] = '';
+        $data['payment_tax_id'] = '';
+        $data['payment_address_1'] = '---';
         $data['payment_address_2'] = '';
-        $data['payment_city'] = $city; 
+        $data['payment_city'] = $city;
         $data['payment_postcode'] =  '';
-        $data['payment_zone'] = ''; 
+        $data['payment_zone'] = '';
         $data['payment_zone_id'] = $this->config->get('config_zone_id');
         $data['payment_country'] = '';
         $data['payment_country_id'] = $this->config->get('config_country_id');
         $data['payment_address_format'] = '';
-        
-        
+
         $data['payment_method'] = '';
         $data['payment_code'] = 'cod';
         $data['shipping_firstname'] = $this->request->post['name'];
-        $data['shipping_lastname'] = '---';    
-        $data['shipping_company'] = '';    
+        $data['shipping_lastname'] = '---';
+        $data['shipping_company'] = '';
         $data['shipping_address_1'] = '---';
         $data['shipping_address_2'] = '';
         $data['shipping_city'] = $city;
@@ -742,7 +738,7 @@ class ControllerCheckoutCart extends Controller {
         $data['shipping_country_id'] = $this->config->get('config_country_id');
         $data['shipping_address_format'] = '';
         $data['shipping_code'] = ((!empty($this->request->post['shipping_code']))? $this->request->post['shipping_code']: '');
-		
+
 		if($data['shipping_code']){
 			$data['shipping_method'] = $this->getShippingMethodName($this->address, $data['shipping_code']);
 			switch ($data['shipping_code']){
@@ -765,14 +761,11 @@ class ControllerCheckoutCart extends Controller {
 					}
 					break;
 			}
-			
+
 		} else {
 			$data['shipping_method'] = '';
 		}
 
-		
-		
-		
         $data['products'] = array();
         foreach ($this->cart->getProducts() as $product) {
             $option_data = array();
@@ -824,12 +817,12 @@ class ControllerCheckoutCart extends Controller {
 
         $data['comment'] = $_POST['comment'];
 
-       
+
         $data['affiliate_id'] = 0;
         $data['commission'] = 0;
         $data['marketing_id'] = 0;
         $data['tracking'] = '';
-       
+
         $data['language_id'] = $this->config->get('config_language_id');
 		$data['language_id'] = $this->config->get('config_language_id');
 		$data['currency_id'] = $this->currency->getId($this->session->data['currency']);
@@ -856,16 +849,16 @@ class ControllerCheckoutCart extends Controller {
         } else {
             $data['accept_language'] = '';
         }
-        
+
         $oid = $this->model_checkout_order->addOrder($data);
         $this->session->data['order_id'] = $oid;
         $this->model_checkout_order->addOrderHistory($oid, 1,'');
 		unset($this->session->data['np']);
 //        print_r($data);die;
         $this->response->setOutput('{"OrderId":'.$oid.',"success":"' . $this->url->link('checkout/success', 'order=' . $oid) . '"}');
-        
+
     }
-	
+
 	private function addPickupLocation(&$data, $location_id)
 	{
 		$this->load->model('localisation/location');
@@ -882,9 +875,9 @@ class ControllerCheckoutCart extends Controller {
 		$np_cities = $this->model_tool_np->getCities(array(
 								'Ref' => $Ref,
 								));
-		
-        $data['payment_city'] = 
-        $data['shipping_city'] = 
+
+        $data['payment_city'] =
+        $data['shipping_city'] =
 			((!empty($np_cities[0]['DescriptionRu']))? $np_cities[0]['DescriptionRu']: $default);
 
 	}
@@ -894,15 +887,13 @@ class ControllerCheckoutCart extends Controller {
 		$np_department = $this->model_tool_np->getDepartments(array(
 								'Ref' => $Ref,
 								));
-		
-		$data['payment_address_1'] = 
-		$data['shipping_address_1'] = 
+
+		$data['payment_address_1'] =
+		$data['shipping_address_1'] =
 			((!empty($np_department[0]['DescriptionRu']))? $np_department[0]['DescriptionRu']: '');
-        $data['payment_city'] = 
-        $data['shipping_city'] = 
+        $data['payment_city'] =
+        $data['shipping_city'] =
 			((!empty($np_department[0]['CityDescriptionRu']))? $np_department[0]['CityDescriptionRu']: '');
-		
-		
 
 	}
 	private function addNP(&$data)
@@ -911,12 +902,12 @@ class ControllerCheckoutCart extends Controller {
 		$np_cities = $this->model_tool_np->getCities();
 		if($np_cities){
 			$data['np_cities'] = $np_cities;
-		} 
+		}
 		if(!empty($this->session->data['np'])){
 			if(!empty($this->session->data['np']['city'])){
 				$data['checked_np_city'] = $this->session->data['np']['city'];
 				$data['np_departments'] = $this->model_tool_np->getDepartments(array('CityRef' => $data['checked_np_city']));
-			} 
+			}
 			if(!empty($this->session->data['np']['department'])){
 				$data['checked_np_department'] = $this->session->data['np']['department'];
 			}
@@ -933,12 +924,12 @@ class ControllerCheckoutCart extends Controller {
 		if(!empty($this->request->post['city']['ref'])){
 			$this->session->data['np']['city'] = $this->request->post['city']['ref'];
 			$this->load->model('tool/np');
-			$json['departments'] = $this->model_tool_np->getDepartments(array('CityRef' => $this->request->post['city']['ref']));	
+			$json['departments'] = $this->model_tool_np->getDepartments(array('CityRef' => $this->request->post['city']['ref']));
 		}
-		
+
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
-		
+
 	}
 	public function autocomplete()
 	{
@@ -949,7 +940,7 @@ class ControllerCheckoutCart extends Controller {
 //		if(!empty($this->request->post['city']['ref'])){
 //			$this->session->data['np']['city'] = $this->request->post['city']['ref'];
 //			$this->load->model('tool/np');
-//			$json['departments'] = $this->model_tool_np->getDepartments(array('CityRef' => $this->request->post['city']['ref']));	
+//			$json['departments'] = $this->model_tool_np->getDepartments(array('CityRef' => $this->request->post['city']['ref']));
 //		}
 		$this->load->model('tool/np');
 		$np_cities = $this->model_tool_np->getCities(array('name' => $this->request->get['name']));
@@ -958,15 +949,13 @@ class ControllerCheckoutCart extends Controller {
 		}
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
-		
+
 	}
-	
-	
+
 	public function hhh()
 	{
 		$this->load->model('tool/np');
 		$this->model_tool_np->addCities();
 		$this->model_tool_np->addDepartments();
 	}
-	
 }

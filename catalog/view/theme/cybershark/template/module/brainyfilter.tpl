@@ -34,7 +34,7 @@ if (!function_exists('isEmptyStock')) {
     .bf-responsive.bf-active.bf-layout-id-<?php echo $layout_id;?> .bf-check-position {
         top: <?php echo (int)$settings['style']['responsive']['offset']; ?>px;
     }
-    .bf-responsive.bf-active.bf-layout-id-<?php echo $layout_id;?> .bf-btn-show, 
+    .bf-responsive.bf-active.bf-layout-id-<?php echo $layout_id;?> .bf-btn-show,
     .bf-responsive.bf-active.bf-layout-id-<?php echo $layout_id;?> .bf-btn-reset {
         top: <?php echo (int)$settings['style']['responsive']['offset']; ?>px;
     }
@@ -49,30 +49,30 @@ if (!function_exists('isEmptyStock')) {
     <?php endif; ?>
     }
     .bf-layout-id-<?php echo $layout_id;?> .bf-attr-header{
-       <?php echo isset($settings['style']['block_header_background']['val'])  ? 'background: '.$settings['style']['block_header_background']['val'].';':''; ?> 
-       <?php echo isset($settings['style']['block_header_text']['val']) ? 'color: '.$settings['style']['block_header_text']['val'].';':''; ?> 
+       <?php echo isset($settings['style']['block_header_background']['val'])  ? 'background: '.$settings['style']['block_header_background']['val'].';':''; ?>
+       <?php echo isset($settings['style']['block_header_text']['val']) ? 'color: '.$settings['style']['block_header_text']['val'].';':''; ?>
     }
     .bf-layout-id-<?php echo $layout_id;?> .bf-count{
-        <?php echo isset($settings['style']['product_quantity_background']['val']) ? 'background: '.$settings['style']['product_quantity_background']['val'].';':''; ?> 
-       <?php echo isset($settings['style']['product_quantity_text']['val']) ? 'color: '.$settings['style']['product_quantity_text']['val'].';':''; ?> 
+        <?php echo isset($settings['style']['product_quantity_background']['val']) ? 'background: '.$settings['style']['product_quantity_background']['val'].';':''; ?>
+       <?php echo isset($settings['style']['product_quantity_text']['val']) ? 'color: '.$settings['style']['product_quantity_text']['val'].';':''; ?>
     }
    .bf-layout-id-<?php echo $layout_id;?> .ui-widget-header {
-        <?php echo isset($settings['style']['price_slider_area_background']['val']) ? 'background: '.$settings['style']['price_slider_area_background']['val'].';':''; ?> 
+        <?php echo isset($settings['style']['price_slider_area_background']['val']) ? 'background: '.$settings['style']['price_slider_area_background']['val'].';':''; ?>
    }
    .bf-layout-id-<?php echo $layout_id;?> .ui-widget-content {
-         <?php echo isset($settings['style']['price_slider_background']['val']) ? 'background: '.$settings['style']['price_slider_background']['val'].';':''; ?> 
-         <?php echo isset($settings['style']['price_slider_border']['val']) ? 'border:1px solid '.$settings['style']['price_slider_border']['val'].';':''; ?> 
+         <?php echo isset($settings['style']['price_slider_background']['val']) ? 'background: '.$settings['style']['price_slider_background']['val'].';':''; ?>
+         <?php echo isset($settings['style']['price_slider_border']['val']) ? 'border:1px solid '.$settings['style']['price_slider_border']['val'].';':''; ?>
    }
 .bf-layout-id-<?php echo $layout_id;?> .ui-state-default {
-         <?php echo isset($settings['style']['price_slider_handle_background']['val']) ? 'background: '.$settings['style']['price_slider_handle_background']['val'].';':''; ?> 
-         <?php echo isset($settings['style']['price_slider_handle_border']['val']) ? 'border:1px solid '.$settings['style']['price_slider_handle_border']['val'].';':''; ?> 
+         <?php echo isset($settings['style']['price_slider_handle_background']['val']) ? 'background: '.$settings['style']['price_slider_handle_background']['val'].';':''; ?>
+         <?php echo isset($settings['style']['price_slider_handle_border']['val']) ? 'border:1px solid '.$settings['style']['price_slider_handle_border']['val'].';':''; ?>
    }
   .bf-layout-id-<?php echo $layout_id;?> .bf-attr-group-header{
-        <?php echo isset($settings['style']['group_block_header_background']['val']) ? 'background: '.$settings['style']['group_block_header_background']['val'].';':''; ?> 
-       <?php echo isset($settings['style']['group_block_header_text']['val']) ? 'color: '.$settings['style']['group_block_header_text']['val'].';':''; ?> 
+        <?php echo isset($settings['style']['group_block_header_background']['val']) ? 'background: '.$settings['style']['group_block_header_background']['val'].';':''; ?>
+       <?php echo isset($settings['style']['group_block_header_text']['val']) ? 'color: '.$settings['style']['group_block_header_text']['val'].';':''; ?>
   }
   <?php if ($settings['behaviour']['hide_empty']) : ?>
-  .bf-layout-id-<?php echo $layout_id;?> .bf-row.bf-disabled, 
+  .bf-layout-id-<?php echo $layout_id;?> .bf-row.bf-disabled,
   .bf-layout-id-<?php echo $layout_id;?> .bf-horizontal .bf-row.bf-disabled {
       display: none;
   }
@@ -85,8 +85,8 @@ if (!function_exists('isEmptyStock')) {
     <div class="box bf-check-position <?php if ($isHorizontal) : ?>bf-horizontal<?php endif; ?>">
         <div class="box-heading"><?php echo $lang_block_title; ?><?php if ($isHorizontal) : ?><a class="bf-toggle-filter-arrow"></a><input type="reset" class="bf-buttonclear" onclick="BrainyFilter.reset();" value="<?php echo $reset; ?>" /><?php endif; ?></div>
         <div class="brainyfilter-panel box-content <?php if ($settings['submission']['hide_panel']) : ?>bf-hide-panel<?php endif; ?>">
-            <form class="bf-form 
-                    <?php if ($settings['behaviour']['product_count']) : ?> bf-with-counts<?php endif; ?> 
+            <form class="bf-form
+                    <?php if ($settings['behaviour']['product_count']) : ?> bf-with-counts<?php endif; ?>
                     <?php if ($sliding) : ?> bf-with-sliding<?php endif; ?>
                     <?php if ($settings['submission']['submit_type'] === 'button' && $settings['submission']['submit_button_type'] === 'float') : ?> bf-with-float-btn<?php endif; ?>
                     <?php if ($limit_height) : ?> bf-with-height-limit<?php endif; ?>"
@@ -112,7 +112,7 @@ if (!function_exists('isEmptyStock')) {
                 <?php endif; ?>
 
                 <?php foreach ($filters as $i => $section) : ?>
-                        
+
                     <?php if ($section['type'] == 'price') : ?>
                         <?php $sliderType = $section['control'] === 'slider_lbl_inp' ? 3 : ($section['control'] === 'slider_lbl' ? 2 : 1); ?>
                         <?php $inputType  = in_array($sliderType, array(1, 3)) ? 'text' : 'hidden'; ?>
@@ -129,11 +129,11 @@ if (!function_exists('isEmptyStock')) {
                                     <span class="ndash">&#8211;</span>
                                     <span class="bf-cur-symb-left"><?php echo ('до'); //$currency_symbol; ?> </span>
                                     <input type="text" class="bf-range-max" name="bfp_price_max" value="<?php echo $upperlimit; ?>" size="4" />
-                                    <span class="bf-cur-symb-right"><?php echo $currency_symbol; ?></span> 
+                                    <span class="bf-cur-symb-right"><?php echo $currency_symbol; ?></span>
                                 </div>
                                 <?php else : ?>
                                 <input type="hidden" class="bf-range-min" name="bfp_price_min" value="<?php echo $lowerlimit; ?>" />
-                                <input type="hidden" class="bf-range-max" name="bfp_price_max" value="<?php echo $upperlimit; ?>" /> 
+                                <input type="hidden" class="bf-range-max" name="bfp_price_max" value="<?php echo $upperlimit; ?>" />
                                 <?php endif; ?>
                                 <div class="bf-price-slider-container <?php if($sliderType === 2 || $sliderType === 3): ?>bf-slider-with-labels<?php endif; ?>">
                                     <div class="bf-slider-range" data-slider-type="<?php echo $sliderType; ?>"></div>
@@ -141,9 +141,9 @@ if (!function_exists('isEmptyStock')) {
                             </div>
                         </div>
                         </div>
-                
+
                     <?php elseif ($section['type'] == 'search') : ?>
-                
+
                         <div class="bf-attr-block bf-keywords-filter <?php if ($isHorizontal && isset($filters[$i + 1]) && $filters[$i + 1]['type'] === 'price') : ?>bf-left-half<?php endif; ?>">
                         <div class="bf-attr-header<?php if ($section['collapsed']) : ?> bf-collapse<?php endif; ?><?php if (!$i) : ?> bf-w-line<?php endif; ?>">
                             <?php echo $lang_search; ?><span class="bf-arrow"></span>
@@ -151,14 +151,14 @@ if (!function_exists('isEmptyStock')) {
                         <div class="bf-attr-block-cont">
                             <div class="bf-search-container bf-attr-filter">
                                 <div>
-                                    <input type="text" class="bf-search" name="bfp_search" value="<?php echo $bfSearch; ?>" /> 
+                                    <input type="text" class="bf-search" name="bfp_search" value="<?php echo $bfSearch; ?>" />
                                 </div>
                             </div>
                         </div>
                         </div>
-                        
+
                     <?php elseif ($section['type'] == 'category') : ?>
-                        
+
                         <div class="bf-attr-block">
                         <div class="bf-attr-header<?php if ($section['collapsed']) : ?> bf-collapse<?php endif; ?><?php if (!$i) : ?> bf-w-line<?php endif; ?>">
                             <?php echo $lang_categories; ?><span class="bf-arrow"></span>
@@ -186,9 +186,9 @@ if (!function_exists('isEmptyStock')) {
                                     <span class="bf-cell bf-c-1">
                                         <input id="bf-attr-<?php echo $groupUID . '_' . $catId . '_' . $layout_id; ?>"
                                                data-filterid="bf-attr-<?php echo $groupUID . '_' . $catId; ?>"
-                                               type="<?php echo $section['control']; ?>" 
+                                               type="<?php echo $section['control']; ?>"
                                                name="<?php echo "bfp_{$groupUID}"; ?><?php if ($section['control'] === 'checkbox') { echo "_{$catId}"; } ?>"
-                                               value="<?php echo $catId; ?>" 
+                                               value="<?php echo $catId; ?>"
                                                <?php if (isset($selected[$groupUID]) && in_array($catId, $selected[$groupUID])) : ?>checked="true"<?php endif; ?> />
                                     </span>
                                     <span class="bf-cell bf-c-2 bf-cascade-<?php echo $cat['level']; ?>">
@@ -203,9 +203,9 @@ if (!function_exists('isEmptyStock')) {
                             <?php endif; ?>
                         </div>
                         </div>
-                
+
                     <?php else : ?>
-                        
+
                         <?php $curGroupId = null; ?>
                         <?php foreach ($section['array'] as $groupId => $group) : ?>
                             <?php if (isset($group['group_id']) && $settings['behaviour']['attribute_groups']) : ?>
@@ -213,7 +213,7 @@ if (!function_exists('isEmptyStock')) {
                                     <div class="bf-attr-group-header"><?php echo $group['group']; ?></div>
                                     <?php $curGroupId = $group['group_id']; ?>
                                 <?php endif; ?>
-                                
+
                             <?php endif; ?>
                             <?php $groupUID = substr($section['type'], 0, 1) . $groupId; ?>
                             <div class="bf-attr-block<?php if (in_array($group['type'], array('slider', 'slider_lbl', 'slider_lbl_inp'))) : ?> bf-slider<?php endif; ?>">
@@ -222,9 +222,9 @@ if (!function_exists('isEmptyStock')) {
                             </div>
                             <div class="bf-attr-block-cont">
                                 <?php $group['type'] = isset($group['type']) ? $group['type'] : 'checkbox'; ?>
-                                
+
                                 <?php if ($group['type'] == 'select') : ?>
-                                
+
                                     <div class="bf-attr-filter bf-attr-<?php echo $groupUID; ?> bf-row">
                                         <div class="bf-cell">
                                             <select name="<?php echo "bfp_{$groupUID}"; ?>">
@@ -236,9 +236,9 @@ if (!function_exists('isEmptyStock')) {
                                             </select>
                                         </div>
                                     </div>
-                                
+
                                 <?php elseif (in_array($group['type'], array('slider', 'slider_lbl', 'slider_lbl_inp'))) : ?>
-                                
+
                                 <div class="bf-attr-filter bf-attr-<?php echo $groupUID; ?> bf-row">
                                     <div class="bf-cell">
                                         <div class="bf-slider-inputs">
@@ -246,7 +246,7 @@ if (!function_exists('isEmptyStock')) {
                                             <?php $isMaxSet = isset($selected[$groupUID]['max']); ?>
                                             <?php $sliderType = $group['type'] === 'slider_lbl_inp' ? 3 : ($group['type'] === 'slider_lbl' ? 2 : 1); ?>
                                             <input type="hidden" name="bfp_min_<?php echo $groupUID; ?>" value="<?php echo $isMinSet ? $selected[$groupUID]['min'] : 'na'; ?>" class="bf-attr-min-<?php echo $groupUID; ?>" data-min-limit="<?php echo $group['min']['s']; ?>" />
-                                            <input type="hidden" name="bfp_max_<?php echo $groupUID; ?>" value="<?php echo $isMaxSet ? $selected[$groupUID]['max'] : 'na'; ?>" class="bf-attr-max-<?php echo $groupUID; ?>" data-max-limit="<?php echo $group['max']['s']; ?>" /> 
+                                            <input type="hidden" name="bfp_max_<?php echo $groupUID; ?>" value="<?php echo $isMaxSet ? $selected[$groupUID]['max'] : 'na'; ?>" class="bf-attr-max-<?php echo $groupUID; ?>" data-max-limit="<?php echo $group['max']['s']; ?>" />
                                             <?php if ($group['type'] !== 'slider_lbl') : ?>
                                             <?php $minLbl = ''; $maxLbl = '';
                                                 if ($isMinSet) {
@@ -255,7 +255,7 @@ if (!function_exists('isEmptyStock')) {
                                                             $minLbl = $v['n'];
                                                             break;
                                                         }
-                                                    } 
+                                                    }
                                                 }
                                                 if ($isMaxSet) {
                                                     foreach ($group['values'] as $v) {
@@ -263,7 +263,7 @@ if (!function_exists('isEmptyStock')) {
                                                             $maxLbl = $v['n'];
                                                             break;
                                                         }
-                                                    } 
+                                                    }
                                                 }
                                             ?>
                                             <input type="text" name="" class="bf-slider-text-inp-min bf-slider-input" value="<?php echo $minLbl; ?>" placeholder="<?php echo $lang_empty_slider; ?>" />
@@ -276,9 +276,9 @@ if (!function_exists('isEmptyStock')) {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <?php elseif ($group['type'] === 'grid') : ?>
-                                
+
                                 <div class="bf-attr-filter bf-attr-<?php echo $groupUID; ?> bf-row">
                                     <div class="bf-grid">
                                         <?php foreach ($group['values'] as $value) : ?>
@@ -286,9 +286,9 @@ if (!function_exists('isEmptyStock')) {
                                         <div class="bf-grid-item">
                                             <input id="bf-attr-<?php echo $groupUID . '_' . $valueId . '_' . $layout_id; ?>" class="bf-hidden"
                                                     data-filterid="bf-attr-<?php echo $groupUID . '_' . $valueId; ?>"
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="<?php echo "bfp_{$groupUID}"; ?>"
-                                                    value="<?php echo $valueId; ?>" 
+                                                    value="<?php echo $valueId; ?>"
                                                     <?php if (isset($selected[$groupUID]) && in_array($valueId, $selected[$groupUID])) : ?>checked="true"<?php endif; ?> />
                                             <label for="bf-attr-<?php echo $groupUID . '_' . $valueId . '_' . $layout_id; ?>">
                                                 <img src="image/<?php echo $value['image'];?>" alt="<?php echo $value['name']; ?>" />
@@ -298,20 +298,20 @@ if (!function_exists('isEmptyStock')) {
                                         <?php endforeach; ?>
                                     </div>
                                 </div>
-                                
+
                                 <?php else : ?>
-                                
+
                                     <?php foreach ($group['values'] as $value) : ?>
                                     <?php $valueId  = $value['id']; ?>
-                                    <div class="bf-attr-filter bf-attr-<?php echo $groupUID; ?> bf-row <?php 
+                                    <div class="bf-attr-filter bf-attr-<?php echo $groupUID; ?> bf-row <?php
                                     if (isset($totals) && isEmptyStock($groupUID, $valueId, $postponedCount, $totals, $selected) && $settings['behaviour']['hide_empty']):
                                         ?>bf-disabled<?php endif; ?>">
                                         <span class="bf-cell bf-c-1">
                                             <input id="bf-attr-<?php echo $groupUID . '_' . $valueId . '_' . $layout_id; ?>"
                                                    data-filterid="bf-attr-<?php echo $groupUID . '_' . $valueId; ?>"
-                                                   type="<?php echo $group['type']; ?>" 
+                                                   type="<?php echo $group['type']; ?>"
                                                    name="<?php echo "bfp_{$groupUID}"; ?><?php if ($group['type'] === 'checkbox') { echo "_{$valueId}"; } ?>"
-                                                   value="<?php echo $valueId; ?>" 
+                                                   value="<?php echo $valueId; ?>"
                                                    <?php if (isset($selected[$groupUID]) && in_array($valueId, $selected[$groupUID])) : ?>checked="true"<?php endif; ?> />
                                         </span>
                                         <span class="bf-cell bf-c-2 <?php if ($section['type'] == 'rating') echo 'bf-rating-' . $valueId; ?>">
@@ -337,11 +337,11 @@ if (!function_exists('isEmptyStock')) {
                             </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
-                    
+
                 <?php endforeach; ?>
                 <?php if (!$isHorizontal || $settings['submission']['submit_type'] == 'button') : ?><div class="bf-buttonclear-box"<?php if ($isHorizontal && $settings['submission']['submit_button_type'] == 'float') : ?>style="display:none;"<?php endif; ?>>
                          <input type="button" value="<?php echo $lang_submit; ?>" class="btn btn-primary bf-buttonsubmit" onclick="BrainyFilter.sendRequest(jQuery(this));BrainyFilter.loadingAnimation();return false;" <?php if ($settings['submission']['submit_button_type'] != 'fix' && $settings['submission']['submit_type'] != 'button' )  : ?>style="display:none;" <?php endif; ?> />
-                   <?php if (!$isHorizontal) : ?><input type="reset" class="bf-buttonclear" onclick="BrainyFilter.reset();return false;" value="<?php echo $reset; ?>" /><?php endif; ?>  
+                   <?php if (!$isHorizontal) : ?><input type="reset" class="bf-buttonclear" onclick="BrainyFilter.reset();return false;" value="<?php echo $reset; ?>" /><?php endif; ?>
                 </div><?php endif; ?>
             </form>
         </div>
@@ -358,7 +358,7 @@ BrainyFilter.requestPrice = BrainyFilter.requestPrice || <?php echo $settings['b
 BrainyFilter.separateCountRequest = BrainyFilter.separateCountRequest || <?php echo $postponedCount ? 'true' : 'false'; ?>;
 BrainyFilter.min = BrainyFilter.min || <?php echo $priceMin; ?>;
 BrainyFilter.max = BrainyFilter.max || <?php echo $priceMax; ?>;
-BrainyFilter.lowerValue = BrainyFilter.lowerValue || <?php echo $lowerlimit; ?>; 
+BrainyFilter.lowerValue = BrainyFilter.lowerValue || <?php echo $lowerlimit; ?>;
 BrainyFilter.higherValue = BrainyFilter.higherValue || <?php echo $upperlimit; ?>;
 BrainyFilter.currencySymb = BrainyFilter.currencySymb || '<?php echo $currency_symbol; ?>';
 BrainyFilter.hideEmpty = BrainyFilter.hideEmpty || <?php echo (int)$settings['behaviour']['hide_empty']; ?>;
@@ -368,11 +368,16 @@ BrainyFilter.selectors = BrainyFilter.selectors || {
     'container' : '<?php echo $settings['behaviour']['containerSelector']; ?>',
     'paginator' : '<?php echo $settings['behaviour']['paginatorSelector']; ?>'
 };
+
+console.log('BrainyFilter.max');
+console.log(BrainyFilter.max);
+console.log('BrainyFilter.min');
+console.log(BrainyFilter.min);
 <?php if ($redirectToUrl) : ?>
 BrainyFilter.redirectTo = BrainyFilter.redirectTo || "<?php echo $redirectToUrl; ?>";
 <?php endif; ?>
 jQuery(function() {
-    if (! BrainyFilter.isInitialized) {  
+    if (! BrainyFilter.isInitialized) {
         BrainyFilter.isInitialized = true;
         if (typeof jQuery.fn.slider === 'undefined') {
             jQuery.getScript('catalog/view/javascript/jquery-ui.slider.min.js', function(){
@@ -398,4 +403,4 @@ BrainyFilter.sliderValues['<?php echo $groupUID; ?>'] = <?php echo json_encode($
 <?php endforeach; ?>
 <?php endif; ?>
 </script>
-<?php endif; 
+<?php endif;

@@ -1,4 +1,4 @@
-<?php  
+<?php
 /**
  * Brainy Filter Ultimate 5.0.5, April 22, 2016 / brainyfilter.com
  * Copyright 2014-2016 Giant Leap Lab / www.giantleaplab.com
@@ -9,14 +9,14 @@
 class ControllerModuleBrainyFilter extends Controller {
     private $_data = array();
     private $_currency;
-    
+
     public function __construct($registry)
     {
         parent::__construct($registry);
         $this->_currency = isset($this->session->data['currency']) ? $this->session->data['currency'] : $this->config->get('config_currency');
     }
-    
-	public function index($moduleSettings) 
+
+	public function index($moduleSettings)
     {
         // the following break point is set in order to prevent extra call of this action
         // while filtering via AJAX. The chain represented below is a reason of this.
@@ -24,20 +24,20 @@ class ControllerModuleBrainyFilter extends Controller {
         if (isset($this->request->get['route']) && $this->request->get['route'] === 'module/brainyfilter/ajaxfilter') {
             return;
         }
-        
+
         $settings = $this->_getSettings($moduleSettings['bf_layout_id']);
-        
+
 		$data = $this->_prepareFilterInitialData();
-        
+
         if (isset($this->request->get['route']) && $this->request->get['route'] === 'product/category'
                 && isset($settings['categories'][$data['filter_category_id']])) {
             return;
         }
-        
+
 		$this->language->load('module/brainyfilter');
         $this->language->load('product/category');
         $isMijoShop = class_exists('MijoShop') && defined('JPATH_MIJOSHOP_OC');
-        
+
 		if (preg_match('/(iPhone|iPod|iPad|Android)/', $_SERVER['HTTP_USER_AGENT'])) {
             if ($isMijoShop) {
                 MijoShop::get('base')->addHeader(JPATH_MIJOSHOP_OC . '/catalog/view/javascript/jquery.ui.touch-punch.min.js', false);
@@ -45,34 +45,40 @@ class ControllerModuleBrainyFilter extends Controller {
                 $this->document->addScript('catalog/view/javascript/jquery.ui.touch-punch.min.js');
             }
 		}
+        $this->document->addScript('catalog/view/javascript/jquery/ui/jquery-ui.min.js');
         if ($isMijoShop) {
             MijoShop::get('base')->addHeader(JPATH_MIJOSHOP_OC . '/catalog/view/javascript/brainyfilter.js', false);
         } else {
             $this->document->addScript('catalog/view/javascript/brainyfilter.js');
         }
-		
+/*
 		if(file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/stylesheet/brainyfilter.css')) {
         	$this->document->addStyle('catalog/view/theme/' . $this->config->get('config_template'). '/stylesheet/brainyfilter.css');
     	}else{
     		$this->document->addStyle('catalog/view/theme/default/stylesheet/brainyfilter.css');
-    	}
-		
+    	}*/
+
+        $this->document->addStyle('catalog/view/theme/' . $this->config->get('config_theme') . '/assets/css/ion.rangeSlider.css');
+        $this->document->addStyle('catalog/view/theme/' . $this->config->get('config_theme') . '/assets/css/ion.rangeSlider.skinHTML5.css');
+        $this->document->addScript('catalog/view/theme/' . $this->config->get('config_theme') . '/assets/js/ion.rangeSlider.min.js');
+        $this->document->addScript('catalog/view/theme/' . $this->config->get('config_theme') . '/assets/js/sticky-kit.min.js');
+
 		$this->_data['base'] = preg_replace('/https?:\/\/[^\/]+/', '', $this->config->get('config_url'));
 
 		$this->load->model('module/brainyfilter');
         $model = new ModelModuleBrainyFilter($this->registry);
-        
+
 		$this->_data['path'] = (isset($this->request->get['path'])) ? $this->request->get['path'] : "";
 
 		$model->setData($data);
-        
+
         $conditions = $model->getConditions();
-        
+
         $this->_data['selected'] = array();
         foreach ($conditions->filters as $guid => $values) {
             $this->_data['selected'][$guid] = $values;
         }
-        
+
 		$this->_data['heading_title']        = sprintf($this->language->get('heading_title'), $this->config->get('config_name'));
 		$this->_data['default_value_select'] = $this->language->get('default_value_select');
 		$this->_data['lang_price']           = $this->language->get('price_header');
@@ -86,19 +92,19 @@ class ControllerModuleBrainyFilter extends Controller {
 		$this->_data['lang_block_title']     = $this->language->get('entry_block_title');
 		$this->_data['lang_empty_slider']    = $this->language->get('empty_slider_value');
         $this->_data['lang_empty_list']      = $this->language->get('text_empty');
-        
+
 		$this->_data['limit_height']         = $settings['behaviour']['limit_height']['enabled'];
 		$this->_data['limit_height_opts']    = $settings['behaviour']['limit_height']['height'];
-		
+
 		$this->_data['sliding']              = $settings['behaviour']['limit_items']['enabled'];
 		$this->_data['slidingOpts']          = $settings['behaviour']['limit_items']['number_to_show'];
 		$this->_data['slidingMin']           = $settings['behaviour']['limit_items']['number_to_hide'];
-        
+
         $basicSettings  = $this->config->get('brainyfilter_layout_basic');
         $postponedCount = $basicSettings['global']['postponed_count'] && empty($conditions->filters)
                 && (!isset($conditions->manufacturer) || array($conditions->manufacturer) === $this->filters['m0']);
         $this->_data['postponedCount'] = $postponedCount;
-        
+
         $lang = (int)$this->config->get('config_language_id');
         if (!empty($settings["behaviour"]["filter_name"][$lang])) {
            $this->_data['lang_block_title'] = $settings["behaviour"]["filter_name"][$lang];
@@ -180,10 +186,10 @@ class ControllerModuleBrainyFilter extends Controller {
                 'array' => array('0' => array(
                         'name' => $this->language->get('rating'),
                         'values' => array(
-                            array('id' => 1, 'name' => '1'), 
-                            array('id' => 2, 'name' => '2'), 
-                            array('id' => 3, 'name' => '3'), 
-                            array('id' => 4, 'name' => '4'), 
+                            array('id' => 1, 'name' => '1'),
+                            array('id' => 2, 'name' => '2'),
+                            array('id' => 3, 'name' => '3'),
+                            array('id' => 4, 'name' => '4'),
                             array('id' => 5, 'name' => '5')),
                         'type' => 'checkbox')),
                 'collapsed' => (bool)$secSettings['rating']['collapsed'],
@@ -234,12 +240,12 @@ class ControllerModuleBrainyFilter extends Controller {
 		$this->_data['lowerlimit'] = isset($conditions->price->inputMin) ? $conditions->price->inputMin : $this->_data['priceMin'];
 		$this->_data['upperlimit'] = isset($conditions->price->inputMax) ? $conditions->price->inputMax : $this->_data['priceMax'];
         $this->_data['bfSearch'] = $conditions->search;
-        
+
         // sort filter sections
         usort($filters, array(__CLASS__, '_sortProperties'));
 
         $this->_data['filters'] = $filters;
-        
+
         if ($this->currency->getsymbolleft($this->_currency)) {
 			$this->_data['currency_symbol']  = $this->currency->getsymbolleft($this->_currency);
 			$this->_data['cur_symbol_side']  = 'left';
@@ -247,8 +253,8 @@ class ControllerModuleBrainyFilter extends Controller {
 			$this->_data['currency_symbol']  = $this->currency->getsymbolright($this->_currency);
 			$this->_data['cur_symbol_side']  = 'right';
 		}
-        if (!isset($this->request->get['route']) 
-                || ($this->request->get['route'] !== 'product/category' 
+        if (!isset($this->request->get['route'])
+                || ($this->request->get['route'] !== 'product/category'
                  && $this->request->get['route'] !== 'product/search'
                  && $this->request->get['route'] !== 'module/brainyfilter/filter')) {
             $this->_data['redirectToUrl'] = $this->url->link('module/brainyfilter/filter', (isset($this->request->get['path'])) ? 'path=' . $this->request->get['path'] : '');
@@ -258,11 +264,11 @@ class ControllerModuleBrainyFilter extends Controller {
         $this->_data['currentPath'] = isset($this->request->get['path']) ? $this->request->get['path'] : false;
         $this->_data['currentRoute'] = isset($this->request->get['route']) ? $this->request->get['route'] : '';
         $this->_data['manufacturerId'] = isset($this->request->get['manufacturer_id']) ? $this->request->get['manufacturer_id'] : '';
-                
+
 		$this->_data['settings']  = $settings;
         $this->_data['layout_id'] = $moduleSettings['bf_layout_id'];
         $this->_data['layout_position'] = $moduleSettings['position'];
-        
+
         if (!$postponedCount && $settings['behaviour']['product_count']) {
             $this->_data['totals'] = $model->calculateTotals();
         }
@@ -277,12 +283,12 @@ class ControllerModuleBrainyFilter extends Controller {
             }
         }
 	}
-	
+
 	private static function _sortProperties($a, $b)
 	{
 		return $a['order'] - $b['order'];
 	}
-	
+
 	public function ajaxfilter()
 	{
         $this->registry->set('bf_force_tmp_table_creation', true);
@@ -301,9 +307,9 @@ class ControllerModuleBrainyFilter extends Controller {
 
 		$this->load->model('module/brainyfilter');
         $model = new ModelModuleBrainyFilter($this->registry);
-        
+
         $model->setData($data);
-		
+
         if ((bool)$this->_getRequestParam('count', false)) {
             $json['brainyfilter'] = $model->calculateTotals();
 		}
@@ -314,7 +320,7 @@ class ControllerModuleBrainyFilter extends Controller {
             $json['min'] = $min;
             $json['max'] = $max;
 		}
-		
+
 		$isMijoShop = class_exists('MijoShop') && defined('JPATH_MIJOSHOP_OC');
 		if ($isMijoShop) {
 			header('Content-Type: application/json');
@@ -324,7 +330,7 @@ class ControllerModuleBrainyFilter extends Controller {
 			$this->response->setOutput(json_encode($json));
 		}
 	}
-    
+
     /**
      * Action for default view. Applying of Brainy Filter from all pages except
      * product/category and product/search will cause redirection to the action.
@@ -332,7 +338,7 @@ class ControllerModuleBrainyFilter extends Controller {
     public function filter()
     {
         $data = $this->_prepareFilterInitialData();
-        
+
         $this->load->controller('product/category', $data);
     }
 
@@ -345,15 +351,15 @@ class ControllerModuleBrainyFilter extends Controller {
 			$parts = explode('_', (string)$this->request->get['path']);
 			$categoryId = array_pop($parts);
 		}
-		
+
         if (isset($this->request->get['limit'])) {
 			$limit = $this->request->get['limit'];
 		} else {
 			$limit = $this->config->get('config_product_limit');
 		}
-        
+
 		$settings = $this->config->get('brainyfilter_layout_basic');
-        
+
 		$data = array(
 			'filter_category_id' => $categoryId,
             'filter_name' => $this->_getRequestParam('search', ''),
@@ -366,7 +372,7 @@ class ControllerModuleBrainyFilter extends Controller {
 
 		return $data;
 	}
-    
+
     private function _getRequestParam($name, $default = null)
     {
         if (isset($this->request->get[$name])) {
@@ -374,8 +380,8 @@ class ControllerModuleBrainyFilter extends Controller {
         }
         return $default;
     }
-    
-    
+
+
     private function _applySettings(&$filters, $type, $settings)
     {
         if (!is_array($filters) || !count($filters)) {
@@ -405,7 +411,7 @@ class ControllerModuleBrainyFilter extends Controller {
             }
         }
     }
-    
+
     private function _sortSubCategories(&$arr)
     {
         $links = array();
@@ -430,17 +436,17 @@ class ControllerModuleBrainyFilter extends Controller {
                 $links[$catId] = & $links[$cat['pid']]['children'][$catId];
             }
         }
-        
+
         $arr = $this->_convertSubCategoriesToArray($arr);
-        
+
         return $arr;
     }
-    
+
     private function _convertSubCategoriesToArray($arr) {
         $out = array();
         if (count($arr)) {
             foreach ($arr as $id => $item) {
-                $children = isset($item['children']) 
+                $children = isset($item['children'])
                         ? $this->_convertSubCategoriesToArray($item['children'])
                         : array();
                 unset($item['children']);
@@ -453,7 +459,7 @@ class ControllerModuleBrainyFilter extends Controller {
         }
         return $out;
     }
-    
+
     private function _filterSubCategories(&$arr, $topCat) {
         foreach ($arr as $k => $item) {
             $parId = array_search($topCat, $item['parents']);
@@ -464,16 +470,16 @@ class ControllerModuleBrainyFilter extends Controller {
             }
         }
     }
-    
+
     private function _getSettings($layoutId)
     {
         $bfSettings = array();
         if ($this->config->get('brainyfilter_layout_basic')) {
             $bfSettings['basic'] = $this->config->get('brainyfilter_layout_basic');
         }
-        
+
         $settings = self::_arrayReplaceRecursive($bfSettings['basic'], $this->config->get('brainyfilter_layout_' . $layoutId));
-        
+
         return $settings;
     }
 
@@ -501,25 +507,25 @@ class ControllerModuleBrainyFilter extends Controller {
         }
         return $array;
     }
-    
+
     public function cron()
     {
         $settings = $this->config->get('brainyfilter_layout_basic');
-        
+
         $key = (isset($settings['global']['cron_secret_key'])) ? $settings['global']['cron_secret_key'] : null;
-        
+
         $getKey = (isset($this->request->get['key'])) ? $this->request->get['key'] : null;
-        
+
         if (!$key || $key !== $getKey) {
             die('unauthorized');
         }
-        
+
         require_once 'admin/model/module/brainyfilter.php';
-        
+
         $model = new ModelModuleBrainyFilter($this->registry);
         $model->fillTaxRateTable();
         $model->fillCacheTable();
-        
+
         die('done');
     }
 }
