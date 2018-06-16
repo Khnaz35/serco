@@ -31,12 +31,12 @@ $(document).ready(function() {
 	// Highlight any found errors
 	$('.text-danger').each(function() {
 		var element = $(this).parent().parent();
-
+		
 		if (element.hasClass('form-group')) {
 			element.addClass('has-error');
 		}
 	});
-
+	
 	// Set last page opened on the menu
 	$('#menu a[href]').on('click', function() {
 		sessionStorage.setItem('menu', $(this).attr('href'));
@@ -51,15 +51,15 @@ $(document).ready(function() {
 
 	if (localStorage.getItem('column-left') == 'active') {
 		$('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
-
+		
 		$('#column-left').addClass('active');
-
+		
 		// Slide Down Menu
 		$('#menu li.active').has('ul').children('ul').addClass('collapse in');
 		$('#menu li').not('.active').has('ul').children('ul').addClass('collapse');
 	} else {
 		$('#button-menu i').replaceWith('<i class="fa fa-indent fa-lg"></i>');
-
+		
 		$('#menu li li.active').has('ul').children('ul').addClass('collapse in');
 		$('#menu li li').not('.active').has('ul').children('ul').addClass('collapse');
 	}
@@ -80,7 +80,7 @@ $(document).ready(function() {
 			localStorage.setItem('column-left', 'active');
 
 			$('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
-
+			
 			$('#column-left').addClass('active');
 
 			// Add the slide down to open menu items
@@ -99,10 +99,32 @@ $(document).ready(function() {
 			$(this).parent('li').siblings().removeClass('open').children('ul.in').collapse('hide');
 		}
 	});
-
-	// Tooltip remove fixed
-	$(document).on('click', '[data-toggle=\'tooltip\']', function(e) {
-		$('body > .tooltip').remove();
+	
+	// Override summernotes image manager
+	$('button[data-event=\'showImageDialog\']').attr('data-toggle', 'image').removeAttr('data-event');
+	
+	$(document).delegate('button[data-toggle=\'image\']', 'click', function() {
+		$('#modal-image').remove();
+		
+		$(this).parents('.note-editor').find('.note-editable').focus();
+				
+		$.ajax({
+			url: 'index.php?route=common/filemanager&token=' + getURLVar('token'),
+			dataType: 'html',
+			beforeSend: function() {
+				$('#button-image i').replaceWith('<i class="fa fa-circle-o-notch fa-spin"></i>');
+				$('#button-image').prop('disabled', true);
+			},
+			complete: function() {
+				$('#button-image i').replaceWith('<i class="fa fa-upload"></i>');
+				$('#button-image').prop('disabled', false);
+			},
+			success: function(html) {
+				$('body').append('<div id="modal-image" class="modal">' + html + '</div>');
+	
+				$('#modal-image').modal('show');
+			}
+		});	
 	});
 
 	// Image Manager
@@ -128,17 +150,33 @@ $(document).ready(function() {
 				return '<button type="button" id="button-image" class="btn btn-primary"><i class="fa fa-pencil"></i></button> <button type="button" id="button-clear" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>';
 			}
 		});
-
-		$element.popover('show');
+		
+		$(element).popover('toggle');		
+		
+		var imageManagerUrl;
 
 		$('#button-image').on('click', function() {
-			var $button = $(this);
-			var $icon   = $button.find('> i');
-			
 			$('#modal-image').remove();
 
+			if(!localStorage.getItem('lastFolder')) {
+
+				imageManagerUrl = 'index.php?route=common/filemanager&token=' + getURLVar('token') + '&target=' + $(element).parent().find('input').attr('id') + '&thumb=' + $(element).attr('id') + '&directory=' + $('#last-folder').val();
+
+			} else {
+
+				var url = localStorage.getItem('lastFolder');
+				var url_splitted =  url.split('&');
+				var directory = url_splitted[2];
+				imageManagerUrl = 'index.php?route=common/filemanager&token=' + getURLVar('token') + '&target=' + $(element).parent().find('input').attr('id') + '&thumb=' + $(element).attr('id') + '&' + directory;
+
+			}
+
+			$('#modal-image').load($(this).attr('href'));  
+			
+
 			$.ajax({
-				url: 'index.php?route=common/filemanager&token=' + getURLVar('token') + '&target=' + $element.parent().find('input').attr('id') + '&thumb=' + $element.attr('id'),
+				url: imageManagerUrl,
+//				url: 'index.php?route=common/filemanager&token=' + getURLVar('token') + '&target=' + $element.parent().find('input').attr('id') + '&thumb=' + $element.attr('id'),
 				dataType: 'html',
 				beforeSend: function() {
 					$button.prop('disabled', true);
@@ -154,14 +192,14 @@ $(document).ready(function() {
 				},
 				success: function(html) {
 					$('body').append('<div id="modal-image" class="modal">' + html + '</div>');
-
+	
 					$('#modal-image').modal('show');
 				}
 			});
-
-			$element.popover('destroy');
+	
+			$(element).popover('destroy');
 		});
-
+	
 		$('#button-clear').on('click', function() {
 			$element.find('img').attr('src', $element.find('img').attr('data-placeholder'));
 
@@ -170,7 +208,7 @@ $(document).ready(function() {
 			$element.popover('destroy');
 		});
 	});
-
+	
 	// tooltips on hover
 	$('[data-toggle=\'tooltip\']').tooltip({container: 'body', html: true});
 

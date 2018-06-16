@@ -44,17 +44,17 @@
               <ul class="nav nav-tabs" id="language">
                 <?php foreach ($languages as $language) { ?>
 
-					<?php 
-						switch($language['code']) {
-							//Add Here your opencart language code if is different of the list in module description in opencart.com web site
-							case 'pt-br':
-								$langC[$language['language_id']] = 'pt';
-								break;
-							default:
-								$langC[$language['language_id']] = $language['code'];
-						}
-					?>
-				
+                    <?php 
+                        switch($language['code']) {
+                            //Add Here your opencart language code if is different of the list in module description in opencart.com web site
+                            case 'pt-br':
+                                $langC[$language['language_id']] = 'pt';
+                                break;
+                            default:
+                                $langC[$language['language_id']] = $language['code'];
+                        }
+                    ?>
+                
                 <li><a href="#language<?php echo $language['language_id']; ?>" data-toggle="tab"><img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" title="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></a></li>
                 <?php } ?>
               </ul>
@@ -914,6 +914,9 @@
                   <thead>
                     <tr>
                       <td class="text-left"><?php echo $entry_additional_image; ?></td>
+<td class="text-left"><?php echo 'Default Image'; ?></td>
+	    
+	    
                       <td class="text-right"><?php echo $entry_sort_order; ?></td>
                       <td></td>
                     </tr>
@@ -923,6 +926,9 @@
                     <?php foreach ($product_images as $product_image) { ?>
                     <tr id="image-row<?php echo $image_row; ?>">
                       <td class="text-left"><a href="" id="thumb-image<?php echo $image_row; ?>" data-toggle="image" class="img-thumbnail"><img src="<?php echo $product_image['thumb']; ?>" alt="" title="" data-placeholder="<?php echo $placeholder; ?>" /></a><input type="hidden" name="product_image[<?php echo $image_row; ?>][image]" value="<?php echo $product_image['image']; ?>" id="input-image<?php echo $image_row; ?>" /></td>
+
+<td class="text-right"><input type="radio" name="def_img" id="radio-input-image<?php echo $image_row; ?>" value="<?php  if (isset($product_image['image'])) { echo $product_image['image']; } ?>" class="form-control" /></td>        
+        
                       <td class="text-right"><input type="text" name="product_image[<?php echo $image_row; ?>][sort_order]" value="<?php echo $product_image['sort_order']; ?>" placeholder="<?php echo $entry_sort_order; ?>" class="form-control" /></td>
                       <td class="text-left"><button type="button" onclick="$('#image-row<?php echo $image_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
                     </tr>
@@ -932,7 +938,13 @@
                   <tfoot>
                     <tr>
                       <td colspan="2"></td>
-                      <td class="text-left"><button type="button" onclick="addImage();" data-toggle="tooltip" title="<?php echo $button_image_add; ?>" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                      <td class="text-left"><button type="button" onclick="addImage();" data-toggle="tooltip" title="<?php echo $button_image_add; ?>" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>                      
+
+        <!-- multi image uploader -->
+        <div id="file-uploader"><noscript><p>Please enable JavaScript to use file uploader.</p><!-- or put a simple form for upload here --></noscript></div>
+        <!-- multi image uploader -->  
+        
+        </td>
                     </tr>
                   </tfoot>
                 </table>
@@ -1165,30 +1177,34 @@ $('#product-related').delegate('.fa-minus-circle', 'click', function() {
   <script type="text/javascript"><!--
 var attribute_row = <?php echo $attribute_row; ?>;
 
-					$(document).ready( function() {
-						<?php foreach ($languages as $language) { ?>
-						$("#title-slug<?php echo $langC[$language['language_id']]; ?>").stringToSlug({
-							setEvents: 'keyup keydown blur',
-							getPut: '#slug-result<?php echo $langC[$language['language_id']]; ?>',
-							options: {
-								lang: '<?php echo $langC[$language['language_id']]; ?>',
-								titleCase: false
-							}
-						});
-						$("#title-slug<?php echo $langC[$language['language_id']]; ?>").stringToSlug({
-							setEvents: 'keyup keydown blur',
-							space: ' ',
-							options: {
-								lang: '<?php echo $langC[$language['language_id']]; ?>',
-								titleCase: true
-							},
-							callback: function(str) {
-								$('.cMeta<?php echo $langC[$language['language_id']]; ?>').val($("#title-slug<?php echo $langC[$language['language_id']]; ?>").val());
-							}
-						});
-						<?php } ?>
-					});
-				
+                    $(document).ready( function() {
+                        var seo_key = $('input[name=\"keyword\"]').val();
+
+                        if(seo_key == ''){
+                            <?php foreach ($languages as $language) { ?>
+                                $("#title-slug<?php echo $langC[$language['language_id']]; ?>").stringToSlug({
+                                    setEvents: 'keyup keydown blur',
+                                    getPut: '#slug-result<?php echo $langC[$language['language_id']]; ?>',
+                                    options: {
+                                        lang: '<?php echo $langC[$language['language_id']]; ?>',
+                                        titleCase: false
+                                    }
+                                });
+                                $("#title-slug<?php echo $langC[$language['language_id']]; ?>").stringToSlug({
+                                    setEvents: 'keyup keydown blur',
+                                    space: ' ',
+                                    options: {
+                                        lang: '<?php echo $langC[$language['language_id']]; ?>',
+                                        titleCase: true
+                                    },
+                                    callback: function(str) {
+                                        $('.cMeta<?php echo $langC[$language['language_id']]; ?>').val($("#title-slug<?php echo $langC[$language['language_id']]; ?>").val());
+                                    }
+                                });
+                            <?php } ?>
+                        }
+                    });
+                
 
 function addAttribute() {
     html  = '<tr id="attribute-row' + attribute_row + '">';
@@ -1473,6 +1489,9 @@ var image_row = <?php echo $image_row; ?>;
 function addImage() {
 	html  = '<tr id="image-row' + image_row + '">';
 	html += '  <td class="text-left"><a href="" id="thumb-image' + image_row + '"data-toggle="image" class="img-thumbnail"><img src="<?php echo $placeholder; ?>" alt="" title="" data-placeholder="<?php echo $placeholder; ?>" /></a><input type="hidden" name="product_image[' + image_row + '][image]" value="" id="input-image' + image_row + '" /></td>';
+ 
+          html += '<td class="text-right"><input type="radio" name="def_img" id="radio-input-image' + image_row + '" value="" disabled="disabled" class="form-control"></td>';                
+        
 	html += '  <td class="text-right"><input type="text" name="product_image[' + image_row + '][sort_order]" value="" placeholder="<?php echo $entry_sort_order; ?>" class="form-control" /></td>';
 	html += '  <td class="text-left"><button type="button" onclick="$(\'#image-row' + image_row  + '\').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
 	html += '</tr>';
@@ -1529,6 +1548,49 @@ $('.datetime').datetimepicker({
 $('#language a:first').tab('show');
 $('#option a:first').tab('show');
 //--></script></div>
+ 
+        <script type="text/javascript">
+          var uploader = new qq.FileUploader({
+              element: document.getElementById('file-uploader'),
+              action: 'index.php?route=tool/mupload&token=<?php echo $token;?>' + '&product_id=<?=$product_id?>',
+              allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+              onComplete: function(id, fileName, responseJSON){addMultiImage(responseJSON.fileName); $('.qq-upload-list').fadeOut( "slow"); },
+          });        
+            <?php if (!isset($pim_status) || $pim_status<>true) {?>
+            
+              function addMultiImage(img) {
+                    if (image_row>0) {
+                        var k = (image_row-1);
+                        
+                        if ($('#input-image'+k).val() == "") {
+                            $('#image-row'+k).remove();
+                        }
+                    }              
+        				$.ajax({
+        					url: 'index.php?route=catalog/product/muimage&token=<?php echo $token; ?>&image=' + encodeURIComponent(img),
+        					dataType: 'text',
+        					success: function(text) {
+                            
+                      
+                  	html  = '<tr id="image-row' + image_row + '">';
+                  	html += '  <td class="text-left"><a href="" id="thumb-image' + image_row + '"data-toggle="image" class="img-thumbnail">';
+                  	html += '<img src="'+text+'" alt="" title="" data-placeholder="<?php echo $placeholder; ?>" />';
+                  	html+='<input type="hidden" name="product_image[' + image_row + '][image]" value="' + img + '" id="input-image' + image_row + '" /></td>';
+                  	html += '<td class="text-right"><input type="radio" name="def_img" value="'+img+'" class="form-control"></td>';
+        
+                  	html += '  <td class="text-right"><input type="text" name="product_image[' + image_row + '][sort_order]" value="" placeholder="<?php echo $entry_sort_order; ?>" class="form-control" /></td>';
+                  	html += '  <td class="text-left"><button type="button" onclick="$(\'#image-row' + image_row  + '\').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+                  	html += '</tr>';              
+                                
+                                
+                  	$('#images tbody').append(html);
+                  	image_row++;										
+        					}
+        				});
+              }              
+          <?php  } ?>
+        </script>
+        
 
 		<script type="text/javascript"><!--
 		<?php foreach ($languages as $language) { ?>
