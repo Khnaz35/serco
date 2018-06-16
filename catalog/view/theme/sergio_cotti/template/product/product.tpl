@@ -14,13 +14,13 @@
 <div id="content" class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-7 ">
+            <div class="col-lg-6 ">
                 <div class="box-img-wrap clearfix">
-                    <?php if ($popup) { ?>
+                    <?php /*if ($popup) { ?>
                         <div class="box-main-img">
                             <img src="<?php echo $popup; ?>" alt="<?php echo $heading_title; ?>" class="img-fluid">
                         </div>
-                    <?php } ?>
+                    <?php }*/ ?>
 
                     <?php if ($images) { ?>
                         <div class="box-switch-img">
@@ -55,18 +55,35 @@
                             $(document).ready(function() {
                                 var galleryTop = new Swiper('.gallery-top', {
                                     spaceBetween: 23,
-                                    slidesPerView: 1,
+                                    slidesPerView: 2,
                                     navigation: {
                                         nextEl: '.swiper-button-next',
                                         prevEl: '.swiper-button-prev',
                                     },
+                                    breakpoints: {
+                                        // when window width is <= 320px
+                                        320: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 10
+                                        },
+                                        // when window width is <= 480px
+                                        480: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 20
+                                        },
+                                        // when window width is <= 640px
+                                        768: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 23
+                                        }
+                                    },
                                 });
                                 var galleryThumbs = new Swiper('.gallery-thumbs', {
                                     spaceBetween: 10,
-                                    centeredSlides: true,
                                     slidesPerView: 'auto',
                                     touchRatio: 0.2,
                                     slideToClickedSlide: true,
+                                    direction: 'horizontal',
                                 });
                                 galleryTop.controller.control = galleryThumbs;
                                 galleryThumbs.controller.control = galleryTop;
@@ -76,9 +93,12 @@
                 </div>
                 <!-- Initialize Swiper -->
             </div>
-            <div class="col-lg-5 sticky_column" id="stickke">
+            <div class="col-lg-5 sticky_column">
                 <div class="product-toolbar clearfix">
+
+                    <!-- Breadcrumbs -->
                     <?php echo $breadcrumbs; ?>
+                    <!-- Breadcrumbs end-->
 
                     <!-- page nav -->
                     <div class="page-navigation">
@@ -86,22 +106,25 @@
                         <a href="#" class="prev-page-navigation"><i class="fal fa-long-arrow-right"></i></a>
                     </div>
                     <!-- page nav end-->
+
                 </div>
 
                 <div id="product" class="product-actions">
 
                     <!--  product-features -->
-                        <div class="product-features">
-                            <h1 class="product-name"><?php echo $heading_title; ?></h1>
-                            <?php if ($sku) { ?>
-                                <span class="product-reference"><?php echo $text_sku; ?> <?php echo $sku; ?></span>
-                            <?php } ?>
+                        <div class="product-features d-flex justify-content-center">
+                            <div>
+                                <h1 class="product-name"><?php echo $heading_title; ?></h1>
+                                <?php if ($sku) { ?>
+                                    <span class="product-reference"><?php echo $text_sku; ?> <?php echo $sku; ?></span>
+                                <?php } ?>
+                            </div>
                         </div>
                     <!--  product-features -->
 
                     <!-- box-product-price -->
                         <?php if ($price) { ?>
-                            <div class="box-product-price clearfix">
+                            <div class="box-product-price clearfix d-flex justify-content-center">
                                 <span class="price-retail"><?php echo $price; ?> <span>грн.</span></span>
                                 <a href="#" class="sale-price"><?php echo $text_opt; ?></a>
                             </div>
@@ -110,7 +133,7 @@
 
                     <!-- product-color-pick -->
                         <?php  if(isset($product_color)){ ?>
-                            <div class="product-color-pick">
+                            <div class="product-color-pick d-flex justify-content-center">
                                 <ul class="product_colors list-unstyled">
                                     <?php  foreach ($product_color as $color) { ?>
                                         <li class="product_color_selected">
@@ -138,7 +161,7 @@
                         <?php if ($options) { ?>
                             <?php foreach ($options as $option) { ?>
                                 <?php if ($option['type'] == 'radio') { ?>
-                                    <div class="box-size-pick-product">
+                                    <div class="box-size-pick-product d-flex justify-content-center">
                                         <span class="size-pick-title"><?php echo $option['name']; ?>:</span>
                                         <?php $i = 1; ?>
                                         <?php foreach ($option['product_option_value'] as $option_value) { ?>
@@ -170,7 +193,7 @@
                     <!-- box-size-pick end-->
 
                     <!-- box-table-size -->
-                        <div class="box-table-size">
+                        <div class="box-table-size d-flex justify-content-center">
                             <a class="table-size-link" href="<?php echo $dimentions_table; ?>"><?php echo $text_dimentions_table; ?></a>
                         </div>
                         <script type="text/javascript">
@@ -231,7 +254,7 @@
             </div>
         </div>
         <div class="produt-tabs">
-            <ul class="nav nav-pills mb-3  d-flex justify-content-center" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills list-unstyled mb-3  d-flex justify-content-center" id="pills-tab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link line-hover active" id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-selected="true"><?php echo $tab_description; ?></a>
                 </li>
@@ -482,27 +505,6 @@ $(document).ready(function() {
     }
 })
 //--></script>
-<script>
-$(document).ready(function() {
-    var galleryTop = new Swiper('.gallery-top', {
-        spaceBetween: 23,
-        slidesPerView: 1,
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
-    var galleryThumbs = new Swiper('.gallery-thumbs', {
-        spaceBetween: 10,
-        centeredSlides: true,
-        slidesPerView: 'auto',
-        touchRatio: 0.2,
-        slideToClickedSlide: true,
-    });
-    galleryTop.controller.control = galleryThumbs;
-    galleryThumbs.controller.control = galleryTop;
-});
-</script>
 <script>
 $(".fixed-sidebar").stick_in_parent();
 </script>

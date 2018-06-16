@@ -70,7 +70,7 @@
     <!-- Wrapper for mobile menu -->
     <div id="wrapper">
         <!--  Mobile menu -->
-        <nav id="menu">
+        <nav id="menu" class="d-none">
             <ul>
                 <li>
                     <input type="text" class="mobile-menu-search" name="m_search" placeholder="Поиск">

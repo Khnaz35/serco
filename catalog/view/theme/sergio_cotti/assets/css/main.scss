@@ -224,13 +224,13 @@ body{
     border-right: 1px solid #e5e5e5;
   }
   .submenu.total-children-4 > li {
-      width: calc(100% / 4);
+    width: calc(100% / 4);
   }
   .submenu.total-children-5 > li {
-      width: calc(100% / 5);
+    width: calc(100% / 5);
   }
   .submenu.total-children-6 > li {
-      width: calc(100% / 3);
+    width: calc(100% / 3);
   }
   .submenu-standart li {padding: 0 18px;}
   .submenu > li:last-child {border-right: none;}
@@ -848,6 +848,11 @@ body{
     }
   }
 }
+@media (max-width: 992px) {
+  .box-breadcrumb{
+    display:none;
+  }
+}
 .title-catalog{
   text-align:center;
   margin-bottom:20px;
@@ -1107,14 +1112,26 @@ body{
 
 /* Product page */
 
-.box-main-img{
+/* .box-main-img{
   width: calc(55.75% - 12px);
   float:left;
   height: 80%;
-}
+} */
 .box-switch-img{
-  width: calc(44.25% - 12px);
-  float:right;
+  /* width: 100%; */
+  /* float:right; */
+  .gallery-top .swiper-slide-active{
+    width: calc(55.75% - 12px) !important;
+  }
+  .gallery-top .swiper-slide-next{
+    width: calc(44.25% - 12px) !important;
+  }
+  @media screen and (max-width: 768px) {
+    .gallery-top .swiper-slide-next,
+    .gallery-top .swiper-slide-active{
+      width: inherit !important;
+    }
+  }
 }
 .swiper-container {
   margin-left: auto;
@@ -1170,7 +1187,12 @@ body{
   }
 }
 .box-img-wrap{
-  margin:0 25px 70px 19px;
+  margin:5px 0 70px 19px;
+}
+@media screen and (max-width: 992px) {
+  .box-img-wrap{
+    margin:5px 0 0px 0px;
+  }
 }
 .product-actions{
   padding:27px;
@@ -1188,6 +1210,11 @@ body{
       letter-spacing:1px;
       color:#adafb2;
     }
+  }
+}
+@media screen and (max-width: 1400px) {
+  .product-actions{
+    padding:0px;
   }
 }
 .product-color-pick{
@@ -1302,7 +1329,7 @@ body{
   }
   .addcart,
   .addwish{
-    width: 30%;
+    width: 45%;
     float:left;
     height: 50px;
     padding: 12px 5px;
@@ -1319,6 +1346,20 @@ body{
       border-color: #23232c;
     }
   }
+  @media screen and (max-width: 1400px) {
+    .addcart{
+      width: 55%;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    .addcart{
+      width: 90%;
+      position: absolute;
+      top: 52%;
+      left: 16px;
+      right: 0;
+    }
+  }
   .addwish{
     width: 9%;
     background: transparent;
@@ -1329,6 +1370,29 @@ body{
       color:#23232c;
       border-color: #23232c;
     }
+  }
+  @media screen and (max-width: 500px) {
+    .addwish,
+    .input-group{
+      width: 49%;
+      float:left;
+      margin-top:50px;
+      dispaly:block;
+    }
+    .input-group{
+      margin-right: 0px;
+      float:left;
+    }
+    .addwish{
+      float: right;
+      font-size:18px;
+      margin-right: 0px;
+    }
+  }
+}
+@media screen and (max-width: 500px) {
+  .box-cart-button{
+    display:block !important;
   }
 }
 .box-product-pay-delivery{
@@ -1357,10 +1421,27 @@ body{
   padding:40px 0;
   border-top:1px solid #f1f2f4;
   border-bottom:1px solid #f1f2f4;
+  overflow: hidden;
   .nav-link{
     font-size: 16px;
     font-weight: 500;
     color: #909097;
+    .item-numb{
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      background: #000;
+      color: #fff;
+      padding: 2px 6px;
+      font-size: 10px;
+    }
+  }
+
+  @media screen and (max-width:420px) {
+    .nav-link{
+      font-size: 13px;
+      padding: 0px 5px 4px 5px;
+    }
   }
   .nav-pills .nav-link.active, .nav-pills .show > .nav-link{
     color: #333;
@@ -1431,6 +1512,12 @@ body{
   .product-input-name{
     width: 47.9%;
     display:inline-block;
+  }
+  @media screen and (max-width:715px) {
+    .product-input-email,
+    .product-input-name{
+      width: 100%;
+    }
   }
   .product-input-name{
     margin-right:25px;
