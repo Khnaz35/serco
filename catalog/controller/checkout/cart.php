@@ -24,12 +24,12 @@ class ControllerCheckoutCart extends Controller {
 			'text' => $this->language->get('heading_title')
 		);
 
-		$this->document->addStyle('catalog/view/javascript/slick/slick-theme.css');
+		/*$this->document->addStyle('catalog/view/javascript/slick/slick-theme.css');
 		$this->document->addStyle('catalog/view/javascript/slick/slick.css');
-		$this->document->addScript('catalog/view/javascript/slick/slick.min.js');
+		$this->document->addScript('catalog/view/javascript/slick/slick.min.js');*/
 //		$this->document->addScript('catalog/view/javascript/bootstrap-select.js');
 		if ($this->cart->hasProducts() || !empty($this->session->data['vouchers'])) {
-//			$this->document->addScript('catalog/view/javascript/jquery/jquery.maskedinput-1.2.2.js');
+			$this->document->addScript('catalog/view/javascript/jquery/maskedinput.js');
 			$data['heading_title'] = $this->language->get('heading_title');
 
 			$data['text_recurring_item'] = $this->language->get('text_recurring_item');
@@ -215,6 +215,8 @@ class ControllerCheckoutCart extends Controller {
 				}
 			}
 
+			$this->document->setBreadcrumbs($data['breadcrumbs']);
+
 			$data['column_left'] = $this->load->controller('common/column_left');
 			$data['column_right'] = $this->load->controller('common/column_right');
 			$data['content_top'] = $this->load->controller('common/content_top');
@@ -224,20 +226,25 @@ class ControllerCheckoutCart extends Controller {
 
 			$this->response->setOutput($this->load->view('checkout/short_cart', $data));
 		} else {
-			$data['heading_title'] = $this->language->get('heading_title');
-
+			$data['heading_title'] = $this->language->get('text_empty');
+			$data['button_shopping'] = $this->language->get('button_shopping');
 			$data['text_error'] = $this->language->get('text_empty');
+
 			$data['callback'] = '';
 			$data_viewed_products = array(
-				'title' => 'Вы смотрели',
+				'limit' => '15',
+				'position' => '0',
+				'width' => '740',
+				'height' => '1140',
 			);
-			$data['viewed_products'] = $this->load->controller('extension/module/viewed_products', $data_viewed_products);
+			$data['viewed_products'] = $this->load->controller('extension/module/productviewed', $data_viewed_products);
 
 			$data['button_continue'] = $this->language->get('button_continue');
 
 			$data['continue'] = $this->url->link('common/home');
 
 			unset($this->session->data['success']);
+			$this->document->setBreadcrumbs($data['breadcrumbs']);
 
 			$data['column_left'] = $this->load->controller('common/column_left');
 			$data['column_right'] = $this->load->controller('common/column_right');
@@ -246,7 +253,7 @@ class ControllerCheckoutCart extends Controller {
 			$data['footer'] = $this->load->controller('common/footer');
 			$data['header'] = $this->load->controller('common/header');
 
-			$this->response->setOutput($this->load->view('error/not_found', $data));
+			$this->response->setOutput($this->load->view('checkout/cart_empty', $data));
 		}
 	}
 
