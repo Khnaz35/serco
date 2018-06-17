@@ -69,37 +69,6 @@
 <body class="<?php echo $class; ?>">
     <!-- Wrapper for mobile menu -->
     <div id="wrapper">
-        <!--  Mobile menu -->
-        <nav id="menu" class="d-none">
-            <ul>
-                <li>
-                    <input type="text" class="mobile-menu-search" name="m_search" placeholder="Поиск">
-                    <a href="#" class="mobile-search-icon"><i class="fal fa-search"></i></a>
-                </li>
-                <li><a href="<?php echo $home; ?>"><?php echo $text_home; ?></a></li>
-                <?php foreach ($categories as $category) { ?>
-                    <li><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a>
-                    <?php if ($category['children']) { ?>
-                        <ul>
-                        <?php foreach ($category['children'] as $child) { ?>
-                            <li><a href="<?php echo $child['href']; ?>"><?php echo $child['name']; ?></a>
-                            <?php if ($child['children']) { ?>
-                                <ul>
-                                <?php foreach ($child['children'] as $subchild) { ?>
-                                    <li><a href="<?php echo $subchild['href']; ?>"><?php echo $subchild['name']; ?></a></li>
-                                <?php } ?>
-                                </ul>
-                            <?php } ?>
-                            </li>
-                        <?php } ?>
-                        </ul>
-                    <?php } ?>
-                    </li>
-                <?php } ?>
-                <li><a href="<?php echo $contact; ?>"><?php echo $text_contact; ?></a></li>
-            </ul>
-        </nav>
-        <!--  Mobile menu -->
         <!-- Top line header -->
         <div id="pre-header" class="d-none d-md-block">
             <div class="container-fluid clearfix">

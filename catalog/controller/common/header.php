@@ -1,10 +1,6 @@
 <?php
 class ControllerCommonHeader extends Controller {
     public function index() {
-//start
-        //$data['search_fixed'] = $this->load->controller('common/search_fixed');
-        //$data['cart_fixed'] = $this->load->controller('common/cart_fixed');
-//end
         // Analytics
         $this->load->model('extension/extension');
 
@@ -28,9 +24,8 @@ class ControllerCommonHeader extends Controller {
             $this->document->addLink($server . 'image/' . $this->config->get('config_icon'), 'icon');
         }
 
-        $data['title'] = $this->document->getTitle();
-
         $data['base']        = $server;
+        $data['title']       = $this->document->getTitle();
         $data['description'] = $this->document->getDescription();
         $data['keywords']    = $this->document->getKeywords();
         $data['links']       = $this->document->getLinks();
@@ -96,25 +91,6 @@ class ControllerCommonHeader extends Controller {
                 'href'  => $this->url->link('account/register', '', true)
             );
         }
-
-        //$data['text_logged'] = sprintf($this->language->get('text_logged'), $this->url->link('account/account', '', true), $this->customer->getFirstName(), $this->url->link('account/logout', '', true));
-
-        //$data['text_account'] = $this->language->get('text_account');
-        //$data['text_register'] = $this->language->get('text_register');
-        //$data['text_login'] = $this->language->get('text_login');
-        //$data['text_order'] = $this->language->get('text_order');
-        //$data['text_transaction'] = $this->language->get('text_transaction');
-        //$data['text_download'] = $this->language->get('text_download');
-        //$data['text_logout'] = $this->language->get('text_logout');
-
-        //$data['logged'] = $this->customer->isLogged();
-        //$data['account'] = $this->url->link('account/account', '', true);
-        //$data['register'] = $this->url->link('account/register', '', true);
-        //$data['login'] = $this->url->link('account/login', '', true);
-        //$data['order'] = $this->url->link('account/order', '', true);
-        //$data['transaction'] = $this->url->link('account/transaction', '', true);
-        //$data['download'] = $this->url->link('account/download', '', true);
-        //$data['logout'] = $this->url->link('account/logout', '', true);
 
         $data['text_shopping_cart'] = $this->language->get('text_shopping_cart');
         $data['text_page']          = $this->language->get('text_page');
